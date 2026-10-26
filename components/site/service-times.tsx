@@ -6,14 +6,14 @@ export function ServiceTimes({ tone = "light" }: { tone?: "light" | "card" }) {
       {CHURCH.schedule.map(({ day, services }) => (
         <div key={day}>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">{day}</p>
-          <ul className="mt-3 space-y-2">
+          <dl className="mt-3 grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2">
             {services.map((s) => (
-              <li key={s.label + s.time} className="flex items-baseline gap-3">
-                <span className="w-20 shrink-0 font-display text-2xl font-semibold text-ink">{s.time.replace(" ", " ")}</span>
-                <span className="text-text">{s.label}</span>
-              </li>
+              <div key={s.label + s.time} className="contents">
+                <dt className="whitespace-nowrap font-display text-2xl font-semibold text-ink">{s.time}</dt>
+                <dd className="text-text">{s.label}</dd>
+              </div>
             ))}
-          </ul>
+          </dl>
         </div>
       ))}
     </div>
