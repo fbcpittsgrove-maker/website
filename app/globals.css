@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/* Classic & warm (approved 2026-10-26): cream paper, deep navy ink,
+   burgundy accents. Components only ever read the role names. */
+@theme {
+  --color-bg: #f8f4ec;
+  --color-surface: #fffdf8;
+  --color-inset: #f1ebdf;
+  --color-ink: #1c2a43;
+  --color-text: #34405a;
+  --color-muted: #6b7385;
+  --color-border: rgba(28, 42, 67, 0.12);
+  --color-border-soft: rgba(28, 42, 67, 0.07);
+  --color-border-strong: rgba(28, 42, 67, 0.2);
+
+  --color-brand: #1f3358;
+  --color-brand-hover: #172846;
+  --color-brand-deep: #13213a;
+  --color-brand-ink: #1f3358;
+  --color-brand-soft: #e7ebf3;
+  --color-brand-line: #b8c3d8;
+  --color-action: #7a1f2b;
+  --color-action-hover: #631823;
+  --color-on-brand: #ffffff;
+
+  --color-accent: #7a1f2b;
+  --color-accent-soft: #f4e6e6;
+  --color-accent-line: #dfb9bd;
+  --color-hero: #13213a;
+  --color-on-hero: #fbf7ef;
+
+  --color-signal: #7a1f2b;
+  --color-signal-soft: #f4e6e6;
+  --color-signal-line: #dfb9bd;
+
+  --color-ok: #1e7a4d;
+  --color-ok-soft: #e8f5ee;
+  --color-ok-line: #bfe3ce;
+
+  --color-warn: #9a5b00;
+  --color-warn-soft: #fdf3e3;
+  --color-warn-line: #f3d9a6;
+
+  --color-bad: #a32020;
+  --color-bad-soft: #fbecec;
+  --color-bad-line: #f0c8c8;
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-serif), Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+/* Dark theme — same roles, re-valued. No parallel class sweep. */
+:root[data-theme="dark"] {
+  --color-bg: #10172a;
+  --color-surface: #172038;
+  --color-inset: #1f2944;
+  --color-ink: #f6f1e6;
+  --color-text: #e3ddd0;
+  --color-muted: #a9adba;
+  --color-border: rgba(255, 255, 255, 0.09);
+  --color-border-soft: rgba(255, 255, 255, 0.05);
+  --color-border-strong: rgba(255, 255, 255, 0.17);
+
+  --color-brand: #b9c8e4;
+  --color-brand-hover: #d6e0f1;
+  --color-brand-deep: #b9c8e4;
+  --color-brand-ink: #b9c8e4;
+  --color-brand-soft: rgba(120, 146, 196, 0.16);
+  --color-brand-line: rgba(185, 200, 228, 0.32);
+  --color-action: #9b3341;
+  --color-action-hover: #b0414f;
+  --color-on-brand: #ffffff;
+
+  --color-accent: #e6a3ab;
+  --color-accent-soft: rgba(155, 51, 65, 0.18);
+  --color-accent-line: rgba(230, 163, 171, 0.32);
+  --color-hero: #0b1120;
+  --color-on-hero: #fbf7ef;
+
+  --color-signal: #e6a3ab;
+  --color-signal-soft: rgba(155, 51, 65, 0.18);
+  --color-signal-line: rgba(230, 163, 171, 0.32);
+
+  --color-ok: #4ade80;
+  --color-ok-soft: rgba(74, 222, 128, 0.14);
+  --color-ok-line: rgba(74, 222, 128, 0.32);
+
+  --color-warn: #fbbf24;
+  --color-warn-soft: rgba(251, 191, 36, 0.14);
+  --color-warn-line: rgba(251, 191, 36, 0.32);
+
+  --color-bad: #f87171;
+  --color-bad-soft: rgba(248, 113, 113, 0.14);
+  --color-bad-line: rgba(248, 113, 113, 0.32);
+}
+
+html {
+  background: var(--color-bg);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  /* Short burgundy rule above section headings. */
+  .rule-accent {
+    display: block;
+    height: 2px;
+    width: 3.5rem;
+    background: var(--color-accent);
+  }
+
+  /* Hero ground when no photo is set: layered navy with a soft burgundy glow. */
+  .hero-ground {
+    background:
+      radial-gradient(ellipse at 85% 10%, color-mix(in srgb, var(--color-action) 38%, transparent), transparent 60%),
+      radial-gradient(ellipse at 0% 100%, color-mix(in srgb, var(--color-brand) 60%, transparent), transparent 65%),
+      var(--color-hero);
+  }
+}

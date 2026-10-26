@@ -1,0 +1,15 @@
+export const BRAND = {
+  name: "Faith Baptist Church of Pittsgrove",
+  short: "FBC",
+  adminName: "FBC Pittsgrove Admin",
+  place: "Elmer, NJ",
+  timeZone: "America/New_York",
+  ink: "#1b2230",
+  paper: "#f5f6f8",
+  surface: "#ffffff",
+  text: "#323a48",
+  muted: "#667085",
+  line: "rgba(27,34,48,.1)",
+  accent: "#2f4a6d",
+  bodyFont: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+} as const;

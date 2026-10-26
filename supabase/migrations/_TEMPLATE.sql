@@ -1,0 +1,7 @@
+-- <name> — one line on what and why.
+--
+-- Reminders:
+--   alter table … enable row level security;  (every table, no exceptions)
+--   create policy "mfa_aal2" on … as restrictive to authenticated using (mfa_satisfied()) with check (mfa_satisfied());
+--   grant update (<col>) on table profiles to authenticated;  (per-column, never whole-table)
+--   security definer functions: set search_path = public, revoke execute from public/anon/authenticated

@@ -1,0 +1,4 @@
+-- seed.sql never runs on a remote branch (config.toml has [db.seed] enabled
+-- = false) — only migrations do. Reference data (config, definitions) ships
+-- as idempotent inserts inside migrations; demo data for the develop branch
+-- is applied by hand, never to prod. This file stays intentionally empty.

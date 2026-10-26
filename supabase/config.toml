@@ -1,0 +1,12 @@
+# Minimal Supabase project config so the CLI recognises this directory.
+# Migrations are pushed with the CLI (`yarn supabase db push`) — Supabase Free
+# has no branching/GitHub integration. No secrets live in this file.
+project_id = "fbc-pittsgrove"
+
+[db]
+major_version = 17
+
+[db.seed]
+# Both databases are persistent — reference data lands via migrations; demo
+# data is applied by hand to dev only.
+enabled = false
