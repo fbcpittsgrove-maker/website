@@ -1,7 +1,8 @@
 import { PageBanner } from "@/components/site/section";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "Contact" };
+export const metadata = pageMetadata("/contact");
 
 export default function ContactPage() {
   const rows = [

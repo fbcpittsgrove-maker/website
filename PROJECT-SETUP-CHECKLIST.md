@@ -1,6 +1,8 @@
 # Faith Baptist Church of Pittsgrove — setup checklist
 
 Repo: fbcpittsgrove-maker/website · Slug `fbc-pittsgrove` · Port 3150 ·
+Domains: https://fbcpittsgrove.church (prod, www → apex 308) ·
+https://dev.fbcpittsgrove.church (develop) · registrar + DNS: Vercel ·
 Region: Supabase `us-east-1` + Vercel `iad1` (confirmed 2026-10-26).
 
 ## Free-tier divergences from the playbook (approved 2026-10-26)
@@ -84,14 +86,21 @@ Verified against supabase.com/pricing and vercel.com/docs on 2026-10-26.
       default branch `master`, ruleset `protect-master` [YOU]
 - [x] `yarn supabase db push` to dev — 9 migrations, RLS on all 13 tables,
       owners seeded, anon reads content only (2026-10-26) [AI]
-- [ ] `yarn supabase db push` to prod once `master` exists [AI, with your OK]
+- [x] `yarn supabase db push` to prod — same 9 migrations, verified (2026-10-26) [AI]
+- [x] Vercel: framework preset Next.js (CLI-created project had none), prod
+      + dev deployments Ready, functions in iad1 [AI]
+- [x] SEO per C:\CODElog-engine: titles/descriptions/canonicals, OG card,
+      Church + Event JSON-LD, sitemap, AI-aware robots, llms.txt [AI]
+- [ ] After the custom domain: Search Console + Bing Webmaster, submit the
+      sitemap, IndexNow; Google Business Profile for the church [YOU + AI]
 - [ ] Bootstrap sign-ins per project: Auth → Add user (password, Auto Confirm
       ON) for Manny + Derek — owner profiles seeded by migration [YOU]
 - [ ] Verification pass (playbook §6, minus the Atlas step) [AI + YOU]
 
 ## Later
 
-- [ ] Custom domain (if the church buys one): registrar DNS + Vercel, then
-      `NEXT_PUBLIC_SITE_URL` + `SCHEMA_PEER_URL` in all scopes [YOU DNS, AI wiring]
+- [x] Custom domain `fbcpittsgrove.church` (bought on Vercel): apex canonical,
+      www 308 → apex, `dev.` → develop; site + peer URLs in all scopes;
+      Supabase auth URLs both projects; vault synced (2026-10-26) [AI]
 - [ ] Resend (Free) on the custom domain: API key → both scopes + auth SMTP on
       both projects [YOU account/DNS, AI wiring]

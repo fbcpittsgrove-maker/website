@@ -6,6 +6,9 @@ import { SermonCard } from "@/components/site/sermon-card";
 import { ServiceTimes } from "@/components/site/service-times";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
 import { publicAnnouncements, publicEvents, publicSermons } from "@/lib/content-server";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata("/");
 
 export default async function HomePage() {
   const [events, sermons, announcements] = await Promise.all([publicEvents(4), publicSermons(1), publicAnnouncements(3)]);

@@ -2,8 +2,9 @@ import Image from "next/image";
 import { PageBanner, SectionHeading } from "@/components/site/section";
 import { ServiceTimes } from "@/components/site/service-times";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "Plan Your Visit" };
+export const metadata = pageMetadata("/visit");
 
 const EXPECT = [
   {

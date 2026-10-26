@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { PageBanner } from "@/components/site/section";
 import { CHURCH, type Ministry } from "@/lib/church";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "Ministries" };
+export const metadata = pageMetadata("/ministries");
 
 export default function MinistriesPage() {
   const ministries: readonly Ministry[] = CHURCH.ministries;

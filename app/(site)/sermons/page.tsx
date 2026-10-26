@@ -1,8 +1,9 @@
 import { PageBanner } from "@/components/site/section";
 import { SermonCard } from "@/components/site/sermon-card";
 import { publicSermons } from "@/lib/content-server";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "Sermons" };
+export const metadata = pageMetadata("/sermons");
 
 export default async function SermonsPage() {
   const sermons = await publicSermons();

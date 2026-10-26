@@ -1,7 +1,8 @@
 import { PageBanner, SectionHeading } from "@/components/site/section";
 import { CHURCH } from "@/lib/church";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "About" };
+export const metadata = pageMetadata("/about");
 
 export default function AboutPage() {
   return (

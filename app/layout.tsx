@@ -5,6 +5,8 @@ import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ErrorReporter } from "@/components/error-reporter";
 import { ThemeSync } from "@/components/theme-sync";
+import { CHURCH } from "@/lib/church";
+import { TITLE_SUFFIX, siteUrl } from "@/lib/seo";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({
@@ -20,11 +22,18 @@ const body = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
-    default: "Faith Baptist Church of Pittsgrove",
-    template: "%s · Faith Baptist Church of Pittsgrove",
+    default: CHURCH.fullName,
+    template: `%s${TITLE_SUFFIX}`,
   },
-  description: "Faith Baptist Church of Pittsgrove — Elmer, New Jersey.",
+  description: `${CHURCH.tagline}.`,
+  openGraph: {
+    type: "website",
+    siteName: CHURCH.fullName,
+    locale: "en_US",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 const themeScript = `(function(){try{var t=localStorage.getItem('fbc-pittsgrove-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t;}catch(e){}})();`;
