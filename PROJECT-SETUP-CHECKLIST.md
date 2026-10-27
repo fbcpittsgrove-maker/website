@@ -59,7 +59,7 @@ Verified against supabase.com/pricing and vercel.com/docs on 2026-10-26.
       repo connected, protection OFF, region `iad1`, Node 24.x, prod domain
       `fbc-pittsgrove.vercel.app` (not suffixed), 6 Production env vars
       (non-sensitive) [AI]
-- [ ] After `master` + `develop` exist on GitHub: production branch →
+- [x] After `master` + `develop` exist on GitHub: production branch →
       `master`, `fbc-pittsgrove-dev.vercel.app` → branch `develop`, Preview
       env vars for branch `develop` (Vercel rejects both until the branches
       exist) [AI]
@@ -70,8 +70,9 @@ Verified against supabase.com/pricing and vercel.com/docs on 2026-10-26.
       owner bootstrap migration, daily keepalive cron, Speed Insights, port
       guard on 3150 [AI]
 - [x] Church seal from the Claude Design logo (`lib/logo.ts`): header/footer
-      mark, `app/icon.svg`, `app/apple-icon.tsx`, share card [AI]- [ ] Domain: pick + register (old faithbaptistpittsgrove.org is not the
-      church's) [YOU, AI checks availability on your OK]
+      mark, `app/icon.svg`, `app/apple-icon.tsx`, share card [AI]
+- [x] Domain: `fbcpittsgrove.church` bought through Vercel, live on prod;
+      `dev.fbcpittsgrove.church` on `develop` [YOU + AI]
 - [x] Design approved 2026-10-26: "Classic & warm" (cream, navy, burgundy,
       Cormorant Garamond + Source Sans 3); applied to site, login and admin [AI]
 - [ ] Confirm church facts in `lib/church.ts` (pastors, address, service
@@ -79,10 +80,11 @@ Verified against supabase.com/pricing and vercel.com/docs on 2026-10-26.
 - [x] Photos: adult/crowd photos only on the site (2026-10-26); originals in
       `design/photos/`, published copies in `public/images/` [AI]
 - [ ] Parents' OK before any photo showing a child's face is published [YOU]
-- [ ] Design proposal from the photos + church branding, approved before the
+- [x] Design proposal from the photos + church branding, approved before the
       public pages are built [AI propose, YOU approve]
-- [ ] Git: `git branch -m main master`, commit, push `master` + `develop`,
-      default branch `master`, ruleset `protect-master` [YOU]
+- [x] Git: `master` + `develop` pushed [YOU]
+- [ ] GitHub: default branch `master`, ruleset `protect-master`, repo
+      private [YOU]
 - [x] `yarn supabase db push` to dev — 9 migrations, RLS on all 13 tables,
       owners seeded, anon reads content only (2026-10-26) [AI]
 - [x] `yarn supabase db push` to prod — same 9 migrations, verified (2026-10-26) [AI]

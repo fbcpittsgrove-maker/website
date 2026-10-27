@@ -100,10 +100,10 @@ export const CHURCH = {
   /** Church-life strip on the homepage — adults and crowds only until
    *  parents have cleared photos that show children. */
   gallery: [
-    { src: "/images/camp-meeting-singing.jpg", alt: "Singers and a pianist leading music at the camp meeting tent" },
-    { src: "/images/hymn-sing-music.jpg", alt: "Two church members with a flute and sheet music at an outdoor hymn sing" },
-    { src: "/images/ladies-ministry.jpg", alt: "The ladies of the church in matching FAITH shirts" },
-    { src: "/images/fellowship-day.jpg", alt: "A good sport in the pie-throwing target at a fellowship day" },
+    { src: "/images/camp-meeting-singing.jpg", caption: "Camp meeting", alt: "Singers and a pianist leading music at the camp meeting tent" },
+    { src: "/images/hymn-sing-music.jpg", caption: "Hymn sing", alt: "Two church members with a flute and sheet music at an outdoor hymn sing" },
+    { src: "/images/ladies-ministry.jpg", caption: "Ladies' ministry", alt: "The ladies of the church in matching FAITH shirts" },
+    { src: "/images/fellowship-day.jpg", caption: "Fellowship day", alt: "A good sport in the pie-throwing target at a fellowship day" },
   ],
 } as const;
 
