@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
@@ -17,6 +17,20 @@ export const metadata = pageMetadata("/");
  *  then a wide closer. */
 const TILE = ["col-span-2 md:col-span-1 md:row-span-2", "", "", "col-span-2"];
 
+/** The hero photo, art-directed: the wide shot from tablets up, the tall
+ *  shot on phones. The browser downloads only the one it shows. */
+function HeroPhoto({ wide, tall }: { wide: string; tall: string }) {
+  const common = { alt: "", fill: true, sizes: "100vw", fetchPriority: "high" as const };
+  const { srcSet: wideSrcSet } = getImageProps({ ...common, src: wide }).props;
+  const { props } = getImageProps({ ...common, src: tall });
+  return (
+    <picture>
+      <source media="(min-width: 768px)" srcSet={wideSrcSet} />
+      <img {...props} alt="" className="-z-10 object-cover object-[50%_60%]" />
+    </picture>
+  );
+}
+
 export default async function HomePage() {
   const [events, sermons, announcements] = await Promise.all([publicEvents(4), publicSermons(1), publicAnnouncements(3)]);
   const pastor = CHURCH.leaders[0];
@@ -28,7 +42,7 @@ export default async function HomePage() {
       >
         {CHURCH.heroImage && (
           <>
-            <Image src={CHURCH.heroImage} alt="" fill priority sizes="100vw" className="-z-10 object-cover object-[50%_60%]" />
+            <HeroPhoto {...CHURCH.heroImage} />
             <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-hero/75 via-hero/35 to-hero/90" />
           </>
         )}
@@ -179,7 +193,7 @@ export default async function HomePage() {
             <span aria-hidden className="rule-accent mb-4" />
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">From our pastor</p>
             <h2 id="pastor" className="mt-3 font-display text-4xl font-medium leading-tight text-ink md:text-5xl">
-              {pastor.title} {pastor.name} and the church family look forward to worshipping with you.
+              {pastor.title} {pastor.name} and the church family look forward to worshiping with you.
             </h2>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link

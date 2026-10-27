@@ -34,7 +34,7 @@ export const PUBLIC_PAGES: PublicPage[] = [
     name: "Plan Your Visit",
     title: "Service Times & Directions",
     description:
-      "Planning your first visit to Faith Baptist Church in Pittsgrove, NJ? Sunday and Wednesday service times, our address on Greenville Rd, and what to expect.",
+      "Planning your first visit to Faith Baptist Church in Pittsgrove, NJ? Sunday, Wednesday and Saturday service times, our Greenville Rd address and what to expect.",
   },
   {
     path: "/about",
@@ -105,7 +105,7 @@ export function siteGraph(base = siteUrl()): JsonLd {
         name: CHURCH.fullName,
         description: `${CHURCH.tagline}.`,
         url: `${base}/`,
-        ...(CHURCH.heroImage ? { image: `${base}${CHURCH.heroImage}` } : {}),
+        ...(CHURCH.heroImage ? { image: `${base}${CHURCH.heroImage.wide}` } : {}),
         address: postalAddress(),
         ...(CHURCH.phone ? { telephone: CHURCH.phone } : {}),
         ...(CHURCH.email ? { email: CHURCH.email } : {}),

@@ -1,4 +1,4 @@
-import { CHURCH } from "@/lib/church";
+import { CHURCH, type ServiceTime } from "@/lib/church";
 import { churchLocalToUtc, utcToChurchLocal } from "@/lib/content";
 
 export type NextService = { label: string; when: string; until: string; at: Date };
@@ -26,15 +26,16 @@ function untilText(minutes: number): string {
 }
 
 /** The next service on the weekly schedule after `now`, in church time
- *  (DST-safe), whatever the visitor's own time zone. */
+ *  (DST-safe), whatever the visitor's own time zone. Outreach is skipped. */
 export function nextService(now: Date, schedule = CHURCH.schedule): NextService {
   const today = utcToChurchLocal(now.toISOString()).slice(0, 10);
   for (let add = 0; add < 8; add++) {
     const day = new Date(`${today}T12:00:00Z`);
     day.setUTCDate(day.getUTCDate() + add);
     const date = day.toISOString().slice(0, 10);
-    const services = schedule.find((d) => d.day === DAYS[day.getUTCDay()])?.services ?? [];
+    const services: readonly ServiceTime[] = schedule.find((d) => d.day === DAYS[day.getUTCDay()])?.services ?? [];
     const upcoming = services
+      .filter((s) => !s.outreach)
       .map((s) => ({ ...s, at: new Date(churchLocalToUtc(`${date}T${to24h(s.time)}`)) }))
       .filter((s) => s.at > now)
       .sort((a, b) => a.at.getTime() - b.at.getTime())[0];

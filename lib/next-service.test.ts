@@ -31,7 +31,7 @@ describe("nextService", () => {
   it("rolls from Sunday night to Wednesday", () => {
     // Sun 25 Oct 2026, 19:00 EDT (23:00 UTC).
     expect(nextService(new Date("2026-10-25T23:00:00Z"))).toMatchObject({
-      label: "Evening Service",
+      label: "Bible Study & Prayer",
       when: "Wednesday · 6:30 PM",
       until: "in 3 days",
       at: new Date("2026-10-28T22:30:00Z"),
@@ -43,7 +43,14 @@ describe("nextService", () => {
     expect(nextService(new Date("2026-10-28T01:00:00Z"))).toMatchObject({ when: "Tomorrow · 6:30 PM", until: "in 21 hr 30 min" });
   });
 
-  it("wraps from Wednesday night to Sunday School", () => {
-    expect(nextService(new Date("2026-10-29T00:00:00Z"))).toMatchObject({ label: "Sunday School", when: "Sunday · 9:45 AM" });
+  it("skips Saturday visitation for the prayer meeting", () => {
+    // Wed 28 Oct 2026, 20:00 EDT, then Sat 31 Oct, 9:00 EDT.
+    expect(nextService(new Date("2026-10-29T00:00:00Z"))).toMatchObject({ label: "Prayer Meeting", when: "Saturday · 4:30 PM" });
+    expect(nextService(new Date("2026-10-31T13:00:00Z"))).toMatchObject({ label: "Prayer Meeting", when: "Today · 4:30 PM" });
+  });
+
+  it("wraps from Saturday night to Sunday School", () => {
+    // Sat 31 Oct 2026, 20:00 EDT.
+    expect(nextService(new Date("2026-11-01T00:00:00Z"))).toMatchObject({ label: "Sunday School", when: "Tomorrow · 9:45 AM" });
   });
 });

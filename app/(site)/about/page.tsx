@@ -18,7 +18,7 @@ export default function AboutPage() {
             we hold it to be the inspired Word of God.
           </p>
           <p>
-            Our desire is to see people come to know Jesus Christ as their Saviour, and to grow together as a church
+            Our desire is to see people come to know Jesus Christ as their Savior, and to grow together as a church
             family in Pittsgrove and the surrounding communities.
           </p>
         </div>

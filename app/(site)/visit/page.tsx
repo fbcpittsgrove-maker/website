@@ -13,7 +13,7 @@ const EXPECT = [
   },
   {
     title: "Bible preaching",
-    body: `Our services centre on the preaching of God’s Word from the ${CHURCH.bible}.`,
+    body: `Our services center on the preaching of God’s Word from the ${CHURCH.bible}.`,
   },
   {
     title: "Come as you are",

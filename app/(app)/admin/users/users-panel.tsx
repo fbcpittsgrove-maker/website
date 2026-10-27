@@ -207,7 +207,7 @@ export function UsersPanel({
                       if (pw) run(setUserPassword(p.id, pw), "Password set.");
                     }}
                     onResetMfa={() => {
-                      if (window.confirm(`Reset two-factor for ${p.email}? They can enrol again from their account page.`))
+                      if (window.confirm(`Reset two-factor for ${p.email}? They can enroll again from their account page.`))
                         run(resetUserMfa(p.id), "Two-factor reset.");
                     }}
                     onDelete={() => {

@@ -6,7 +6,9 @@
  * yet confirmed by the church. Confirm before the site goes live.
  */
 
-export type ServiceTime = { time: string; label: string };
+/** `outreach` marks time the church spends out in the community rather than
+ *  gathered at the building — listed, but never the hero's "Next gathering". */
+export type ServiceTime = { time: string; label: string; outreach?: boolean };
 export type ServiceDay = { day: string; services: ServiceTime[] };
 export type Leader = { name: string; title: string; bio: string; image?: string; imageAlt?: string };
 export type Ministry = { name: string; when?: string; blurb: string; image?: string; imageAlt?: string };
@@ -37,7 +39,14 @@ export const CHURCH = {
     },
     {
       day: "Wednesday",
-      services: [{ time: "6:30 PM", label: "Evening Service" }],
+      services: [{ time: "6:30 PM", label: "Bible Study & Prayer" }],
+    },
+    {
+      day: "Saturday",
+      services: [
+        { time: "11:00 AM", label: "Visitation", outreach: true },
+        { time: "4:30 PM", label: "Prayer Meeting" },
+      ],
     },
   ] satisfies ServiceDay[],
   leaders: [
@@ -61,13 +70,13 @@ export const CHURCH = {
       blurb: "Bible classes before the morning service.",
     },
     {
-      name: "Midweek Service",
+      name: "Bible Study & Prayer",
       when: "Wednesdays at 6:30 PM",
-      blurb: "Our midweek gathering for the whole church.",
+      blurb: "Midweek Bible study and prayer for the whole church.",
     },
     {
       name: "Bus Ministry",
-      blurb: "The church bus helps bring neighbours to church.",
+      blurb: "The church bus helps bring neighbors to church.",
       image: "/images/church-bus.jpeg",
       imageAlt: "The yellow Faith Baptist Church bus, lettered Pittsgrove, NJ",
     },
@@ -96,8 +105,9 @@ export const CHURCH = {
       imageAlt: "A church member receiving a discipleship certificate in the sanctuary",
     },
   ] satisfies Ministry[],
-  /** Public path of the hero photo under /public, or null for the plain hero. */
-  heroImage: "/images/sanctuary.jpeg" as string | null,
+  /** Hero photos under /public — `wide` for tablets and up, `tall` for
+   *  phones — or null for the plain hero. */
+  heroImage: { wide: "/images/sanctuary-wide.jpg", tall: "/images/sanctuary-tall.jpg" } as { wide: string; tall: string } | null,
   exteriorImage: "/images/church-exterior.jpeg",
   /** Church-life strip on the homepage — adults and crowds only until
    *  parents have cleared photos that show children. */

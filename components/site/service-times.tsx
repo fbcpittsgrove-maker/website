@@ -3,7 +3,7 @@ import { CHURCH } from "@/lib/church";
 const FRAME = {
   light: "",
   card: "rounded-2xl border border-border bg-surface p-6 md:p-8",
-  hero: "",
+  hero: "lg:grid-cols-3",
 };
 
 export function ServiceTimes({ tone = "light" }: { tone?: "light" | "card" | "hero" }) {
