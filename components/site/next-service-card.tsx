@@ -20,13 +20,13 @@ export function NextServiceCard() {
   return (
     <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-md md:justify-self-end">
       <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.18em] opacity-80">
-        <span aria-hidden className="h-2 w-2 rounded-full bg-accent-line" />
+        <span aria-hidden className="h-2 w-2 rounded-full bg-gold" />
         Next gathering
       </p>
       <p className="mt-3 min-h-[2.5rem] font-display text-3xl font-semibold leading-tight">{next?.label}</p>
       <p className="mt-4 flex min-h-[2.4rem] items-baseline justify-between gap-3 border-t border-white/20 pt-4">
         <span className="opacity-90">{next?.when}</span>
-        <span className="text-sm font-semibold text-accent-line">{next?.until}</span>
+        <span className="text-sm font-semibold text-gold">{next?.until}</span>
       </p>
     </div>
   );

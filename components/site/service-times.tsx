@@ -12,7 +12,7 @@ export function ServiceTimes({ tone = "light" }: { tone?: "light" | "card" | "he
     <div className={`grid gap-6 sm:grid-cols-2 ${FRAME[tone]}`}>
       {CHURCH.schedule.map(({ day, services }) => (
         <div key={day}>
-          <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${onHero ? "text-accent-line" : "text-accent"}`}>{day}</p>
+          <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${onHero ? "text-gold" : "text-accent"}`}>{day}</p>
           <dl className="mt-3 grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2">
             {services.map((s) => (
               <div key={s.label + s.time} className="contents">

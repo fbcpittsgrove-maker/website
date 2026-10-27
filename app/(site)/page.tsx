@@ -34,7 +34,7 @@ export default async function HomePage() {
         )}
         <div className="mx-auto grid w-full max-w-6xl items-end gap-10 px-4 pb-14 pt-36 md:grid-cols-2 md:px-6 md:pb-20">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent-line">Pittsgrove, New Jersey</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">Pittsgrove, New Jersey</p>
             <h1 className="mt-4 font-display text-6xl font-semibold leading-[0.95] md:text-8xl">
               Welcome <em className="font-medium">home.</em>
             </h1>
@@ -65,7 +65,7 @@ export default async function HomePage() {
       <section aria-labelledby="times" className="bg-hero text-on-hero">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_2fr] md:px-6 md:py-20">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent-line">Join us</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold">Join us</p>
             <h2 id="times" className="mt-1 font-display text-4xl font-semibold leading-tight md:text-5xl">
               Service Times
             </h2>
@@ -74,7 +74,7 @@ export default async function HomePage() {
               href={directionsUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 inline-block text-sm font-semibold text-accent-line hover:underline"
+              className="mt-3 inline-block text-sm font-semibold text-gold hover:underline"
             >
               Get directions →
             </a>
@@ -89,7 +89,7 @@ export default async function HomePage() {
                 <span className="block font-semibold">First time visiting?</span>
                 <span className="block text-sm opacity-70">Here&apos;s what to expect.</span>
               </span>
-              <ArrowRight aria-hidden className="h-5 w-5 text-accent-line" />
+              <ArrowRight aria-hidden className="h-5 w-5 text-gold" />
             </Link>
           </div>
         </div>
@@ -143,7 +143,7 @@ export default async function HomePage() {
             “For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not
             perish, but have everlasting life.”
           </blockquote>
-          <p className="mt-6 text-sm font-semibold uppercase tracking-[0.24em] text-accent-line">John 3:16</p>
+          <p className="mt-6 text-sm font-semibold uppercase tracking-[0.24em] text-gold">John 3:16</p>
         </div>
       </section>
 

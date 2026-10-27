@@ -47,7 +47,7 @@ export function SiteHeader() {
               href={href}
               aria-current={isActive(href) ? "page" : undefined}
               className={`rounded-md px-3 py-2 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                overlay ? "hover:text-accent-line" : isActive(href) ? "text-accent" : "text-text hover:text-ink"
+                overlay ? "hover:text-gold" : isActive(href) ? "text-accent" : "text-text hover:text-ink"
               }`}
             >
               {label}
@@ -56,7 +56,7 @@ export function SiteHeader() {
           <Link
             href="/visit"
             className={`ml-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-              overlay ? "bg-on-hero text-hero hover:bg-accent-line" : "bg-action text-on-brand hover:bg-action-hover"
+              overlay ? "bg-on-hero text-hero hover:bg-gold" : "bg-action text-on-brand hover:bg-action-hover"
             }`}
           >
             Plan Your Visit
