@@ -8,7 +8,7 @@
 
 export type ServiceTime = { time: string; label: string };
 export type ServiceDay = { day: string; services: ServiceTime[] };
-export type Leader = { name: string; title: string; bio: string };
+export type Leader = { name: string; title: string; bio: string; image?: string; imageAlt?: string };
 export type Ministry = { name: string; when?: string; blurb: string; image?: string; imageAlt?: string };
 
 export const CHURCH = {
@@ -45,6 +45,8 @@ export const CHURCH = {
       name: "Glen D. Bradbury",
       title: "Pastor",
       bio: "",
+      image: "/images/camp-meeting-preaching.jpg",
+      imageAlt: "Pastor Glen D. Bradbury preaching under the camp meeting tent",
     },
     {
       name: "Steven Bradbury",
@@ -73,7 +75,7 @@ export const CHURCH = {
       name: "Camp Meetings",
       blurb: "Preaching and special music under the big red-and-white tent on the church grounds.",
       image: "/images/camp-meeting-preaching.jpg",
-      imageAlt: "A preacher at the pulpit under the camp meeting tent",
+      imageAlt: "Pastor Glen D. Bradbury preaching under the camp meeting tent",
     },
     {
       name: "Ladies’ Ministry",

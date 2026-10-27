@@ -144,14 +144,6 @@ export default async function HomePage() {
             perish, but have everlasting life.”
           </blockquote>
           <p className="mt-6 text-sm font-semibold uppercase tracking-[0.24em] text-accent-line">John 3:16</p>
-          {pastor && (
-            <p className="mt-10 opacity-80">
-              {pastor.title} {pastor.name} and the church family look forward to worshipping with you.{" "}
-              <Link href="/about" className="font-semibold text-accent-line hover:underline">
-                Meet our pastors
-              </Link>
-            </p>
-          )}
         </div>
       </section>
 
@@ -175,6 +167,37 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
+
+      {pastor && (
+        <section aria-labelledby="pastor" className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-20 md:grid-cols-2 md:gap-16 md:px-6">
+          {pastor.image && pastor.imageAlt && (
+            <div className="relative aspect-[4/5] max-h-[560px] overflow-hidden rounded-2xl bg-inset">
+              <Image src={pastor.image} alt={pastor.imageAlt} fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover object-[50%_30%]" />
+            </div>
+          )}
+          <div>
+            <span aria-hidden className="rule-accent mb-4" />
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">From our pastor</p>
+            <h2 id="pastor" className="mt-3 font-display text-4xl font-medium leading-tight text-ink md:text-5xl">
+              {pastor.title} {pastor.name} and the church family look forward to worshipping with you.
+            </h2>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/about"
+                className="rounded-full bg-action px-6 py-3 font-semibold text-on-brand transition-colors hover:bg-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                Meet our pastors
+              </Link>
+              <Link
+                href="/contact"
+                className="rounded-full border border-border-strong px-6 py-3 font-semibold text-ink transition-colors hover:bg-inset focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                Get in touch
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }

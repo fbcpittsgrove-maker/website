@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PageBanner, SectionHeading } from "@/components/site/section";
 import { CHURCH } from "@/lib/church";
 import { pageMetadata } from "@/lib/seo";
@@ -28,10 +29,17 @@ export default function AboutPage() {
           <SectionHeading id="pastors" eyebrow="Leadership" title="Our Pastors" />
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {CHURCH.leaders.map((l) => (
-              <article key={l.name} className="rounded-2xl border border-border bg-bg p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">{l.title}</p>
-                <h3 className="mt-2 font-display text-3xl font-semibold text-ink">{l.name}</h3>
-                {l.bio && <p className="mt-3 text-text">{l.bio}</p>}
+              <article key={l.name} className="overflow-hidden rounded-2xl border border-border bg-bg">
+                {l.image && l.imageAlt && (
+                  <div className="relative aspect-[4/3] bg-inset">
+                    <Image src={l.image} alt={l.imageAlt} fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover object-[50%_25%]" />
+                  </div>
+                )}
+                <div className="p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">{l.title}</p>
+                  <h3 className="mt-2 font-display text-3xl font-semibold text-ink">{l.name}</h3>
+                  {l.bio && <p className="mt-3 text-text">{l.bio}</p>}
+                </div>
               </article>
             ))}
           </div>
