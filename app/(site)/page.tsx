@@ -20,7 +20,7 @@ const TILE = ["col-span-2 md:col-span-1 md:row-span-2", "", "", "col-span-2"];
 /** The hero photo, art-directed: the wide shot from tablets up, the tall
  *  shot on phones. The browser downloads only the one it shows. */
 function HeroPhoto({ wide, tall }: { wide: string; tall: string }) {
-  const common = { alt: "", fill: true, sizes: "100vw", fetchPriority: "high" as const };
+  const common = { alt: "", fill: true, sizes: "100vw", quality: 85, fetchPriority: "high" as const };
   const { srcSet: wideSrcSet } = getImageProps({ ...common, src: wide }).props;
   const { props } = getImageProps({ ...common, src: tall });
   return (
@@ -43,6 +43,7 @@ export default async function HomePage() {
         {CHURCH.heroImage && (
           <>
             <HeroPhoto {...CHURCH.heroImage} />
+            <div aria-hidden className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-hero/75 via-hero/30 to-transparent md:block" />
             <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-hero/75 via-hero/35 to-hero/90" />
           </>
         )}

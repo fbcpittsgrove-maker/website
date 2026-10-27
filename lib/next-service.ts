@@ -17,7 +17,7 @@ export function to24h(time: string): string {
 
 function untilText(minutes: number): string {
   if (minutes < 60) return `in ${minutes} min`;
-  if (minutes < 1440) {
+  if (minutes < 2880) {
     const m = minutes % 60;
     return `in ${Math.floor(minutes / 60)} hr${m ? ` ${m} min` : ""}`;
   }

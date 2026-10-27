@@ -43,6 +43,11 @@ describe("nextService", () => {
     expect(nextService(new Date("2026-10-28T01:00:00Z"))).toMatchObject({ when: "Tomorrow · 6:30 PM", until: "in 21 hr 30 min" });
   });
 
+  it("counts hours, not days, when the service is under two days away", () => {
+    // Tue 27 Oct 2026, 14:30 EDT.
+    expect(nextService(new Date("2026-10-27T18:30:00Z"))).toMatchObject({ when: "Tomorrow · 6:30 PM", until: "in 28 hr" });
+  });
+
   it("skips Saturday visitation for the prayer meeting", () => {
     // Wed 28 Oct 2026, 20:00 EDT, then Sat 31 Oct, 9:00 EDT.
     expect(nextService(new Date("2026-10-29T00:00:00Z"))).toMatchObject({ label: "Prayer Meeting", when: "Saturday · 4:30 PM" });
