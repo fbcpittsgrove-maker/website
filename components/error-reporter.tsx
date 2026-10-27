@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { isBrowserNoise } from "@/lib/browser-noise";
 
 /** Global client crash sink: window errors and unhandled rejections POST to
  *  /api/report-issue so they land in the owner log instead of nowhere. */
@@ -19,11 +20,16 @@ export function ErrorReporter() {
       }).catch(() => {});
     }
     function onError(event: ErrorEvent) {
-      send(event.message ?? "window error", { stack: event.error?.stack?.slice(0, 2000) });
+      const message = event.message ?? "window error";
+      const stack: string | undefined = event.error?.stack?.slice(0, 2000);
+      if (isBrowserNoise(message, stack)) return;
+      send(message, { stack });
     }
     function onRejection(event: PromiseRejectionEvent) {
       const reason = event.reason;
-      send(reason instanceof Error ? reason.message : String(reason));
+      const message = reason instanceof Error ? reason.message : String(reason);
+      if (isBrowserNoise(message, reason instanceof Error ? reason.stack : undefined)) return;
+      send(message);
     }
     window.addEventListener("error", onError);
     window.addEventListener("unhandledrejection", onRejection);
