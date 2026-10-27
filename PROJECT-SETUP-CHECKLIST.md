@@ -69,9 +69,8 @@ Verified against supabase.com/pricing and vercel.com/docs on 2026-10-26.
       events / sermons / announcements editor, interim public homepage,
       owner bootstrap migration, daily keepalive cron, Speed Insights, port
       guard on 3150 [AI]
-- [ ] PWA icons (`app/apple-icon.png`, 192/512 PNGs) from the church logo —
-      interim SVG cross until a logo arrives [AI]
-- [ ] Domain: pick + register (old faithbaptistpittsgrove.org is not the
+- [x] Church seal from the Claude Design logo (`lib/logo.ts`): header/footer
+      mark, `app/icon.svg`, `app/apple-icon.tsx`, share card [AI]- [ ] Domain: pick + register (old faithbaptistpittsgrove.org is not the
       church's) [YOU, AI checks availability on your OK]
 - [x] Design approved 2026-10-26: "Classic & warm" (cream, navy, burgundy,
       Cormorant Garamond + Source Sans 3); applied to site, login and admin [AI]
@@ -91,8 +90,12 @@ Verified against supabase.com/pricing and vercel.com/docs on 2026-10-26.
       + dev deployments Ready, functions in iad1 [AI]
 - [x] SEO per C:\CODElog-engine: titles/descriptions/canonicals, OG card,
       Church + Event JSON-LD, sitemap, AI-aware robots, llms.txt [AI]
-- [ ] After the custom domain: Search Console + Bing Webmaster, submit the
-      sitemap, IndexNow; Google Business Profile for the church [YOU + AI]
+- [x] Search Console: domain verified by DNS TXT, sitemap submitted
+      (2026-10-26) [YOU + AI]
+- [x] IndexNow: key file, ping on admin content save/delete (prod only),
+      `scripts/indexnow-submit.mjs` for a whole-sitemap submit [AI]
+- [ ] Bing Webmaster (import from Search Console); Google Business Profile
+      for the church [YOU]
 - [ ] Bootstrap sign-ins per project: Auth → Add user (password, Auto Confirm
       ON) for Manny + Derek — owner profiles seeded by migration [YOU]
 - [ ] Verification pass (playbook §6, minus the Atlas step) [AI + YOU]

@@ -8,7 +8,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3 md:px-6">
         <div>
           <div className="flex items-center gap-3">
-            <BrandMark size={28} className="text-accent-line" />
+            <BrandMark size={44} />
             <p className="font-display text-2xl font-semibold">{CHURCH.fullName}</p>
           </div>
           <p className="mt-3 text-sm opacity-75">{CHURCH.tagline}.</p>

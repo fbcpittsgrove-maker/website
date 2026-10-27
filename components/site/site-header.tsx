@@ -23,7 +23,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
         <Link href="/" className="flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand">
-          <BrandMark size={30} className="text-accent" />
+          <BrandMark size={40} />
           <span className="leading-none">
             <span className="block font-display text-[22px] font-semibold text-ink">Faith Baptist Church</span>
             <span className="mt-0.5 block text-[11px] font-semibold uppercase tracking-[0.24em] text-muted">of Pittsgrove</span>

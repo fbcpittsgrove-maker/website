@@ -1,11 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { requireStaff } from "@/lib/auth/profile";
 import { createClient } from "@/lib/supabase/server";
 import { logActivity } from "@/lib/activity";
-import { reportAndFail } from "@/lib/issues";
+import { reportAndFail, reportIssue } from "@/lib/issues";
 import { CONTENT_LABEL, parseContent, type ContentKind } from "@/lib/content";
+import { pagesShowing, submitToIndexNow } from "@/lib/indexnow";
+import { siteUrl } from "@/lib/seo";
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -15,6 +18,14 @@ function refresh(kind: ContentKind) {
   revalidatePath(`/admin/${kind}`);
   revalidatePath("/admin");
   revalidatePath("/");
+  if (process.env.VERCEL_ENV !== "production") return;
+  after(async () => {
+    try {
+      await submitToIndexNow(siteUrl(), pagesShowing(kind, siteUrl()));
+    } catch (e) {
+      await reportIssue({ source: "server_action", route: `content.indexnow.${kind}`, message: e instanceof Error ? e.message : String(e) });
+    }
+  });
 }
 
 /** Create (id null) or update one content row. RLS lets any active member

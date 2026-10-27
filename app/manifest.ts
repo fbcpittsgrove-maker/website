@@ -7,10 +7,11 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Faith Baptist Church of Pittsgrove — Elmer, New Jersey.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f5f6f8",
-    theme_color: "#2f4a6d",
+    background_color: "#f8f4ec",
+    theme_color: "#1c2b55",
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
+      { src: "/apple-icon", sizes: "180x180", type: "image/png", purpose: "any" },
     ],
   };
 }

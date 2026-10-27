@@ -1,16 +1,34 @@
-/** Interim mark — a plain cross until the church's own logo is supplied. */
+import { LOGO, SEAL } from "@/lib/logo";
+
+/** The church seal (lib/logo.ts). Solid gold rather than the gradient so
+ *  several marks on one page never share a gradient id. */
 export function BrandMark({ size = 32, className }: { size?: number; className?: string }) {
+  const { navy, gold } = LOGO;
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 64 64"
-      fill="currentColor"
+      viewBox={LOGO.viewBox}
       role="img"
       aria-label="Faith Baptist Church of Pittsgrove"
-      className={`shrink-0 ${className ?? "text-brand-ink"}`}
+      className={`shrink-0 ${className ?? ""}`}
     >
-      <path d="M28 6h8v16h14v8H36v28h-8V30H14v-8h14z" />
+      <circle cx="260" cy="262" r="174" fill={gold} />
+      <circle cx="260" cy="262" r="165" fill={navy} />
+      {SEAL.stems.map((d) => (
+        <path key={d} d={d} fill="none" stroke={gold} strokeWidth="3.2" strokeLinecap="round" />
+      ))}
+      {SEAL.leaves.map((t) => (
+        <path key={t} d={SEAL.leaf} transform={t} fill={gold} />
+      ))}
+      <path d={SEAL.cross} fill={gold} />
+      <path d={SEAL.bibleBase} fill={gold} />
+      <path d={SEAL.pageLeft} fill={gold} stroke={navy} strokeWidth="1.6" strokeLinejoin="round" />
+      <path d={SEAL.pageRight} fill={gold} stroke={navy} strokeWidth="1.6" strokeLinejoin="round" />
+      {SEAL.lines.map((d) => (
+        <path key={d} d={d} fill="none" stroke={navy} strokeOpacity=".55" strokeWidth="1.4" strokeLinecap="round" />
+      ))}
+      <path d={SEAL.spine} stroke={navy} strokeWidth="2" />
     </svg>
   );
 }
