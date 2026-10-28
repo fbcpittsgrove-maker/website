@@ -58,6 +58,13 @@ export const PUBLIC_PAGES: PublicPage[] = [
       "Recent sermons preached at Faith Baptist Church of Pittsgrove, New Jersey, with the scripture passage, a short summary, and links to watch or listen again.",
   },
   {
+    path: "/salvation",
+    name: "The Bible Way to Heaven",
+    title: "The Bible Way to Heaven",
+    description:
+      "You can know 100% for sure that you will spend eternity in Heaven. Six simple truths from the Bible about sin, Christ's love, and God's gift of salvation.",
+  },
+  {
     path: "/questions",
     name: "Bible Questions",
     title: "Bible Questions Answered",

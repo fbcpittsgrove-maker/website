@@ -9,8 +9,10 @@ export const dynamic = "force-dynamic";
 /** Import endpoint for sermon blog drafts written off-site (transcribe →
  *  draft in Claude Code → scripts/import-sermon.mjs). Authenticated by the
  *  shared SCHEMA_PEER_SECRET. It only ever stages: new posts land as drafts
- *  (or sermon ideas), an existing unpublished post is replaced only when the
- *  caller asks (`replace`), and a published post is never touched.
+ *  (or sermon ideas), a sermon idea becomes a draft once a sermon answers it,
+ *  a `link: only` file adds this sermon as a source of an existing question
+ *  page, an existing unpublished post is replaced only when the caller asks
+ *  (`replace`), and a published post's text is never touched.
  *  Publishing is a person's job in /admin. */
 function secretMatches(header: string | null): boolean {
   const expected = process.env.SCHEMA_PEER_SECRET;
@@ -41,6 +43,9 @@ type Staged = {
   slug: string;
   status: "idea" | "draft";
   startSeconds: number | null;
+  /** `link: only` — this sermon also answers an existing question page: add
+   *  it as a source and leave the page's text to the editor. */
+  linkOnly: boolean;
   fields: { title: string; description: string; question: string; body_md: string; reviewer_notes: string };
 };
 
@@ -65,6 +70,19 @@ function toStaged(draft: DraftFile, kind: PostKind, startSeconds: number | null)
   if (draft.meta.kind !== kind) throw new ImportError(`${label}: kind must be ${kind}`);
   const slug = need(draft, "slug", label);
   if (!SLUG_RE.test(slug) || slug.length > 80) throw new ImportError(`${label}: bad slug ${slug}`);
+  if (draft.meta.link !== undefined && draft.meta.link !== "only") throw new ImportError(`${label}: link must be "only"`);
+  if (draft.meta.link === "only") {
+    if (kind !== "question") throw new ImportError(`${label}: only a question page can be linked`);
+    return {
+      kind,
+      label,
+      slug,
+      status: "draft",
+      startSeconds,
+      linkOnly: true,
+      fields: { title: "", description: "", question: "", body_md: "", reviewer_notes: "" },
+    };
+  }
   const status = draft.meta.status === "idea" ? "idea" : "draft";
   if (status === "idea" && kind !== "question") throw new ImportError(`${label}: only a question can be an idea`);
   if (status === "draft" && !draft.body) throw new ImportError(`${label}: draft has no body`);
@@ -74,6 +92,7 @@ function toStaged(draft: DraftFile, kind: PostKind, startSeconds: number | null)
     slug,
     status,
     startSeconds,
+    linkOnly: false,
     fields: {
       title: need(draft, "title", label),
       description: draft.meta.description ?? "",
@@ -184,7 +203,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const results: { slug: string; outcome: "created" | "replaced" | "skipped_exists" | "skipped_published" }[] = [];
+    const results: { slug: string; outcome: "created" | "replaced" | "answered_idea" | "linked" | "skipped_exists" | "skipped_published" }[] = [];
+    const linkSource = async (post: Staged, postId: string) => {
+      const { error } = await admin
+        .from("post_sources")
+        .upsert({ post_id: postId, sermon_id: sermon, start_seconds: post.startSeconds }, { onConflict: "post_id,sermon_id" });
+      if (error) throw new Error(`${post.label}: source link failed — ${error.message}`);
+    };
     const stage = async (post: Staged) => {
       // A sermon's post is found by its sermon, so a changed slug updates it
       // rather than colliding with posts_one_per_sermon.
@@ -206,11 +231,21 @@ export async function POST(request: NextRequest) {
         found = data;
       }
 
+      if (post.linkOnly) {
+        if (!found) throw new ImportError(`${post.label}: link: only, but no question page has this slug`);
+        if (found.status === "idea") throw new ImportError(`${post.label}: is still a sermon idea; send a full draft to answer it`);
+        await linkSource(post, found.id);
+        results.push({ slug: post.slug, outcome: "linked" });
+        return;
+      }
       if (found?.status === "published") {
         results.push({ slug: post.slug, outcome: "skipped_published" });
         return;
       }
-      if (found && !payload.replace) {
+      // A sermon idea has no text anyone edited: the first draft that
+      // answers it takes its place.
+      const answersIdea = found?.status === "idea" && post.status === "draft";
+      if (found && !payload.replace && !answersIdea) {
         results.push({ slug: post.slug, outcome: "skipped_exists" });
         return;
       }
@@ -222,7 +257,7 @@ export async function POST(request: NextRequest) {
           .eq("id", found.id);
         if (error) throw new Error(`${post.label}: update failed — ${error.message}`);
         postId = found.id;
-        results.push({ slug: post.slug, outcome: "replaced" });
+        results.push({ slug: post.slug, outcome: answersIdea ? "answered_idea" : "replaced" });
       } else {
         const { data: created, error } = await admin
           .from("posts")
@@ -233,12 +268,7 @@ export async function POST(request: NextRequest) {
         postId = created.id as string;
         results.push({ slug: post.slug, outcome: "created" });
       }
-      if (post.kind === "question" && post.status !== "idea") {
-        const { error } = await admin
-          .from("post_sources")
-          .upsert({ post_id: postId, sermon_id: sermon, start_seconds: post.startSeconds }, { onConflict: "post_id,sermon_id" });
-        if (error) throw new Error(`${post.label}: source link failed — ${error.message}`);
-      }
+      if (post.kind === "question" && post.status !== "idea") await linkSource(post, postId);
     };
 
     await stage(sermonPost);
