@@ -56,6 +56,9 @@ export async function deleteContent(kind: ContentKind, id: string): Promise<Resu
   if (!KINDS.includes(kind)) return { ok: false, error: "Unknown content type." };
   const supabase = await createClient();
   const { error } = await supabase.from(kind).delete().eq("id", id).select("id").single();
+  if (error?.code === "23503" && kind === "sermons") {
+    return { ok: false, error: "This sermon has a blog post. Delete the post on the Blog page first." };
+  }
   if (error) {
     return reportAndFail(
       { source: "server_action", route: `content.delete.${kind}`, message: error.message, errorCode: error.code, userId: actor.id },

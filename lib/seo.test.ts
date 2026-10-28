@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CHURCH } from "@/lib/church";
-import { PUBLIC_PAGES, TITLE_SUFFIX, eventsGraph, jsonLdScript, pageMetadata, siteGraph, siteUrl } from "@/lib/seo";
+import { PUBLIC_PAGES, TITLE_SUFFIX, eventsGraph, jsonLdScript, pageMetadata, postGraph, postMetadata, siteGraph, siteUrl } from "@/lib/seo";
 
 const BASE = "https://fbc.example";
 
@@ -95,6 +95,34 @@ describe("structured data", () => {
     expect("endDate" in graph[0]).toBe(false);
     expect("description" in graph[0]).toBe(false);
     expect(graph[1]).toMatchObject({ endDate: "2026-06-01T19:00:00.000Z", description: "Bring a dish", location: { name: "Parvin State Park" } });
+  });
+
+  it("credits the preacher on a sermon post and the church on a question page", () => {
+    const post = {
+      kind: "sermon" as const,
+      slug: "the-promise-of-heaven",
+      title: "The Promise of Heaven",
+      description: "d",
+      published_at: "2026-10-26T15:00:00Z",
+      updated_at: "2026-10-27T15:00:00Z",
+      sermon: { preacher: "Steven Bradbury" },
+    };
+    const [article, crumbs] = postGraph(post, BASE)["@graph"] as Record<string, unknown>[];
+    expect(article).toMatchObject({
+      "@type": "BlogPosting",
+      url: `${BASE}/sermons/the-promise-of-heaven`,
+      datePublished: "2026-10-26T15:00:00.000Z",
+      author: { "@type": "Person", name: "Steven Bradbury" },
+      publisher: { "@id": `${BASE}/#organization` },
+    });
+    expect((crumbs.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Home", "Sermons", "The Promise of Heaven"]);
+    const question = (postGraph({ ...post, kind: "question" }, BASE)["@graph"] as Record<string, unknown>[])[0];
+    expect(question).toMatchObject({ url: `${BASE}/questions/the-promise-of-heaven`, author: { "@id": `${BASE}/#organization` } });
+  });
+
+  it("gives a post an absolute title, canonical and article Open Graph", () => {
+    const meta = postMetadata({ kind: "question", slug: "is-jesus-god", title: "Is Jesus God?", description: "d", published_at: "2026-10-26T15:00:00Z", updated_at: "2026-10-26T15:00:00Z" });
+    expect(meta).toMatchObject({ title: { absolute: "Is Jesus God?" }, alternates: { canonical: "/questions/is-jesus-god" }, openGraph: { type: "article" } });
   });
 
   it("can't be broken out of its script tag by content", () => {

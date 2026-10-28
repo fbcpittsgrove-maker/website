@@ -58,6 +58,13 @@ export const PUBLIC_PAGES: PublicPage[] = [
       "Recent sermons preached at Faith Baptist Church of Pittsgrove, New Jersey, with the scripture passage, a short summary, and links to watch or listen again.",
   },
   {
+    path: "/questions",
+    name: "Bible Questions",
+    title: "Bible Questions Answered",
+    description:
+      "Plain answers to common Bible questions about heaven, salvation and who Jesus is, drawn from the preaching at Faith Baptist Church of Pittsgrove, NJ.",
+  },
+  {
     path: "/events",
     name: "Events",
     title: "Upcoming Events",
@@ -181,5 +188,79 @@ export function pageMetadata(path: string) {
       images: [OG_IMAGE],
     },
     twitter: { card: "summary_large_image" as const, title: fullTitle, description: page.description, images: [OG_IMAGE.url] },
+  };
+}
+
+export type PostForLd = {
+  kind: "sermon" | "question";
+  slug: string;
+  title: string;
+  description: string;
+  published_at: string;
+  updated_at: string;
+  sermon: { preacher: string } | null;
+};
+
+const postUrl = (post: Pick<PostForLd, "kind" | "slug">, base: string) =>
+  `${base}${post.kind === "sermon" ? "/sermons/" : "/questions/"}${post.slug}`;
+
+/** BlogPosting + BreadcrumbList for one sermon post or question page. The
+ *  preacher is the author of a sermon post; a question page, drawn from the
+ *  church's preaching, is authored by the church node. */
+export function postGraph(post: PostForLd, base = siteUrl()): JsonLd {
+  const url = postUrl(post, base);
+  const section = post.kind === "sermon" ? { name: "Sermons", path: "/sermons" } : { name: "Bible Questions", path: "/questions" };
+  const preacher = post.kind === "sermon" ? post.sermon?.preacher.trim() : "";
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": `${url}#article`,
+        headline: post.title,
+        description: post.description,
+        url,
+        mainEntityOfPage: url,
+        datePublished: new Date(post.published_at).toISOString(),
+        dateModified: new Date(post.updated_at).toISOString(),
+        author: preacher ? { "@type": "Person", name: preacher } : { "@id": `${base}/#organization` },
+        publisher: { "@id": `${base}/#organization` },
+        isPartOf: { "@id": `${base}/#website` },
+        image: `${base}${OG_IMAGE.url}`,
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumbs`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${base}/` },
+          { "@type": "ListItem", position: 2, name: section.name, item: `${base}${section.path}` },
+          { "@type": "ListItem", position: 3, name: post.title, item: url },
+        ],
+      },
+    ],
+  };
+}
+
+/** Next metadata for a post: its own absolute title (the gate holds it to
+ *  30–60 characters), canonical, and an article Open Graph block. */
+export function postMetadata(post: Pick<PostForLd, "kind" | "slug" | "title" | "description" | "published_at" | "updated_at">) {
+  const path = `${post.kind === "sermon" ? "/sermons/" : "/questions/"}${post.slug}`;
+  return {
+    title: { absolute: post.title },
+    description: post.description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "article" as const,
+      siteName: CHURCH.fullName,
+      locale: "en_US",
+      title: post.title,
+      description: post.description,
+      url: path,
+      publishedTime: new Date(post.published_at).toISOString(),
+      modifiedTime: new Date(post.updated_at).toISOString(),
+      images: [OG_IMAGE],
+    },
+    twitter: { card: "summary_large_image" as const, title: post.title, description: post.description, images: [OG_IMAGE.url] },
   };
 }

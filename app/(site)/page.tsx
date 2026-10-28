@@ -9,6 +9,7 @@ import { SermonCard } from "@/components/site/sermon-card";
 import { ServiceTimes } from "@/components/site/service-times";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
 import { publicAnnouncements, publicEvents, publicSermons } from "@/lib/content-server";
+import { sermonPostSlugs } from "@/lib/posts-server";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata("/");
@@ -32,7 +33,12 @@ function HeroPhoto({ wide, tall }: { wide: string; tall: string }) {
 }
 
 export default async function HomePage() {
-  const [events, sermons, announcements] = await Promise.all([publicEvents(4), publicSermons(1), publicAnnouncements(3)]);
+  const [events, sermons, announcements, sermonSlugs] = await Promise.all([
+    publicEvents(4),
+    publicSermons(1),
+    publicAnnouncements(3),
+    sermonPostSlugs(),
+  ]);
   const pastor = CHURCH.leaders[0];
 
   return (
@@ -175,7 +181,7 @@ export default async function HomePage() {
         <div aria-labelledby="sermon" className="flex flex-col rounded-2xl border border-border bg-surface p-7 md:p-10">
           <SectionHeading id="sermon" eyebrow="Listen again" title="Latest Sermon" />
           <div className="mt-8">
-            {sermons[0] ? <SermonCard sermon={sermons[0]} /> : <p className="text-muted">Sermons will be posted here soon.</p>}
+            {sermons[0] ? <SermonCard sermon={sermons[0]} postSlug={sermonSlugs.get(sermons[0].id)} /> : <p className="text-muted">Sermons will be posted here soon.</p>}
           </div>
           <Link href="/sermons" className="mt-auto inline-block pt-6 font-semibold text-accent hover:underline">
             All sermons →
