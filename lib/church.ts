@@ -62,6 +62,8 @@ export const CHURCH = {
       name: "Steven Bradbury",
       title: "Assistant Pastor",
       bio: "Steven, his wife Kristen and their children came to Faith Baptist from First Baptist Church in Hammond, Indiana, where Steven served in the bus ministry and junior church.",
+      image: "/images/steven-kristen-bradbury.jpg",
+      imageAlt: "Assistant Pastor Steven Bradbury and his wife Kristen, smiling outdoors",
     },
   ] satisfies Leader[],
   ministries: [
