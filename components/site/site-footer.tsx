@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BrandMark } from "@/components/brand-mark";
-import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
+import { CHURCH, addressLine, directionsUrl, phoneHref } from "@/lib/church";
 
 export function SiteFooter() {
   return (
@@ -31,6 +31,14 @@ export function SiteFooter() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-60">Find us</p>
           <address className="mt-3 text-sm not-italic opacity-80">{addressLine()}</address>
+          {CHURCH.phone && (
+            <p className="mt-2 text-sm opacity-80">
+              Call or text{" "}
+              <a href={phoneHref("tel")} className="font-semibold underline-offset-4 hover:underline">
+                {CHURCH.phone}
+              </a>
+            </p>
+          )}
           <div className="mt-4 flex flex-col gap-2 text-sm font-medium">
             <a href={directionsUrl()} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:underline">
               Get directions

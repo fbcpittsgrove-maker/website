@@ -26,7 +26,7 @@ export const CHURCH = {
     zip: "08318",
   },
   facebook: "https://www.facebook.com/profile.php?id=61595428580525",
-  phone: null as string | null,
+  phone: "(856) 362-4851" as string | null,
   email: null as string | null,
   bible: "King James Bible",
   schedule: [
@@ -130,6 +130,12 @@ export const CHURCH = {
 export function addressLine(): string {
   const { street, city, state, zip } = CHURCH.address;
   return `${street}, ${city}, ${state} ${zip}`;
+}
+
+/** `tel:` or `sms:` link for the church phone — US numbers, so +1. */
+export function phoneHref(scheme: "tel" | "sms"): string {
+  if (!CHURCH.phone) throw new Error("CHURCH.phone is not set");
+  return `${scheme}:+1${CHURCH.phone.replace(/\D/g, "")}`;
 }
 
 export function directionsUrl(): string {

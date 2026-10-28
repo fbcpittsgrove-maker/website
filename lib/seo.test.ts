@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { CHURCH } from "@/lib/church";
+import { CHURCH, phoneHref } from "@/lib/church";
 import { PUBLIC_PAGES, TITLE_SUFFIX, eventsGraph, jsonLdScript, pageMetadata, postGraph, postMetadata, siteGraph, siteUrl } from "@/lib/seo";
 
 const BASE = "https://fbc.example";
@@ -76,6 +76,11 @@ describe("structured data", () => {
     const church = (siteGraph(BASE)["@graph"] as Record<string, unknown>[])[0];
     expect("telephone" in church).toBe(Boolean(CHURCH.phone));
     expect("email" in church).toBe(Boolean(CHURCH.email));
+  });
+
+  it("builds call and text links from the church phone", () => {
+    expect(phoneHref("tel")).toBe("tel:+18563624851");
+    expect(phoneHref("sms")).toBe("sms:+18563624851");
   });
 
   it("describes events with ISO dates, the church as organizer, and a place", () => {

@@ -1,13 +1,15 @@
 import { PageBanner } from "@/components/site/section";
-import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
+import { CHURCH, addressLine, directionsUrl, phoneHref } from "@/lib/church";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata("/contact");
 
+type Row = { label: string; value: string; href: string; also?: { label: string; href: string } };
+
 export default function ContactPage() {
-  const rows = [
+  const rows: Row[] = [
     { label: "Address", value: addressLine(), href: directionsUrl() },
-    ...(CHURCH.phone ? [{ label: "Phone", value: CHURCH.phone, href: `tel:${CHURCH.phone.replace(/[^\d+]/g, "")}` }] : []),
+    ...(CHURCH.phone ? [{ label: "Phone", value: CHURCH.phone, href: phoneHref("tel"), also: { label: "Or send a text", href: phoneHref("sms") } }] : []),
     ...(CHURCH.email ? [{ label: "Email", value: CHURCH.email, href: `mailto:${CHURCH.email}` }] : []),
     { label: "Facebook", value: "Message us on Facebook", href: CHURCH.facebook },
   ];
@@ -30,6 +32,11 @@ export default function ContactPage() {
                   >
                     {r.value}
                   </a>
+                  {r.also && (
+                    <a href={r.also.href} className="mt-1 block text-sm font-semibold text-accent underline-offset-4 hover:underline">
+                      {r.also.label}
+                    </a>
+                  )}
                 </dd>
               </div>
             );
