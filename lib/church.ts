@@ -11,7 +11,8 @@
 export type ServiceTime = { time: string; label: string; outreach?: boolean };
 export type ServiceDay = { day: string; services: ServiceTime[] };
 export type Leader = { name: string; title: string; bio: string; image?: string; imageAlt?: string };
-export type Ministry = { name: string; when?: string; blurb: string; image?: string; imageAlt?: string };
+export type MinistryClass = { name: string; who?: string };
+export type Ministry = { name: string; when?: string; blurb: string; classes?: MinistryClass[]; image?: string; imageAlt?: string };
 
 export const CHURCH = {
   name: "Faith Baptist Church",
@@ -67,7 +68,14 @@ export const CHURCH = {
     {
       name: "Sunday School",
       when: "Sundays at 9:45 AM",
-      blurb: "Bible classes before the morning service.",
+      blurb: "Bible classes for every age before the morning service.",
+      classes: [
+        { name: "Primary", who: "Kindergarten–3rd grade" },
+        { name: "Junior", who: "4th–5th grade" },
+        { name: "Teen", who: "6th–12th grade" },
+        { name: "Adult Ladies" },
+        { name: "Adult Men" },
+      ],
     },
     {
       name: "Bible Study & Prayer",

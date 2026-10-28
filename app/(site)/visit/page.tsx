@@ -16,6 +16,10 @@ const EXPECT = [
     body: `Our services center on the preaching of God’s Word from the ${CHURCH.bible}.`,
   },
   {
+    title: "Classes for every age",
+    body: "Sunday School at 9:45 AM has classes for kindergarten through 3rd grade, 4th–5th grade, teens, adult ladies and adult men.",
+  },
+  {
     title: "Come as you are",
     body: "Whether this is your first time in church or you have been coming for years, you are welcome here.",
   },
@@ -68,7 +72,7 @@ export default function VisitPage() {
       <section className="bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-16 md:px-6">
           <SectionHeading eyebrow="Your first visit" title="What to Expect" />
-          <div className="mt-10 grid gap-8 md:grid-cols-3">
+          <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {EXPECT.map((e) => (
               <div key={e.title}>
                 <p className="font-display text-2xl font-semibold text-ink">{e.title}</p>

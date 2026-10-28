@@ -158,3 +158,23 @@ export async function deletePost(id: string): Promise<Result> {
   refresh(data.kind as PostKind, data.slug as string, data.status === "published");
   return { ok: true };
 }
+
+/** The reviewer's one-tap answer to "who preached this?" on a sermon post. */
+export async function setSermonPreacher(sermonId: string, preacher: string): Promise<Result> {
+  const actor = await requireStaff();
+  const name = preacher.trim();
+  if (!name) return { ok: false, error: "Enter who preached this sermon." };
+  if (name.length > 200) return { ok: false, error: "That name is too long." };
+  const supabase = await createClient();
+  const { error } = await supabase.from("sermons").update({ preacher: name }).eq("id", sermonId).select("id").single();
+  if (error) {
+    return reportAndFail(
+      { source: "server_action", route: "posts.preacher", message: error.message, errorCode: error.code, userId: actor.id },
+      "Couldn't save who preached this sermon.",
+    );
+  }
+  await logActivity(actor.id, "sermons_updated", { id: sermonId, preacher: name });
+  revalidatePath("/admin/posts");
+  revalidatePath("/admin/sermons");
+  return { ok: true };
+}

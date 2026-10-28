@@ -23,6 +23,16 @@ export default function MinistriesPage() {
                 {m.when && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-accent">{m.when}</p>}
                 <h2 className="font-display text-3xl font-semibold text-ink">{m.name}</h2>
                 <p className="mt-3 text-text">{m.blurb}</p>
+                {m.classes && (
+                  <ul className="mt-5 divide-y divide-border-soft border-y border-border-soft">
+                    {m.classes.map((c) => (
+                      <li key={c.name} className="flex items-baseline justify-between gap-4 py-2.5">
+                        <span className="font-semibold text-ink">{c.name} class</span>
+                        {c.who && <span className="text-right text-sm text-muted">{c.who}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </article>
           ))}
