@@ -13,7 +13,8 @@ export type ServiceDay = { day: string; services: ServiceTime[] };
 export type Leader = { name: string; title: string; bio: string; image?: string; imageAlt?: string };
 export type MinistryClass = { name: string; who?: string; teacher?: string };
 export type Worker = { name: string; role: string; image: string; imageAlt: string };
-export type Ministry = { name: string; when?: string; blurb: string; classes?: MinistryClass[]; image?: string; imageAlt?: string };
+/** `text` puts a pre-written text button on the card (see lib/text-us). */
+export type Ministry = { name: string; when?: string; blurb: string; classes?: MinistryClass[]; text?: "bus"; image?: string; imageAlt?: string };
 
 export const CHURCH = {
   name: "Faith Baptist Church",
@@ -107,6 +108,7 @@ export const CHURCH = {
     {
       name: "Bus Ministry",
       blurb: "The church bus helps bring neighbors to church.",
+      text: "bus",
       image: "/images/church-bus.jpeg",
       imageAlt: "The yellow Faith Baptist Church bus, lettered Pittsgrove, NJ",
     },

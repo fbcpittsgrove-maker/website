@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PageBanner } from "@/components/site/section";
 import { pageMetadata } from "@/lib/seo";
+import { TEXT_MESSAGES, textHref } from "@/lib/text-us";
 
 export const metadata = pageMetadata("/salvation");
 
@@ -113,9 +114,15 @@ export default function SalvationPage() {
             We would love to hear from you, answer your questions and help you take your next step. Come worship with us this Sunday.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
+            <a
+              href={textHref("saved")}
+              className="rounded-full bg-action px-5 py-2.5 text-sm font-semibold text-on-brand hover:bg-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:hidden"
+            >
+              {TEXT_MESSAGES.saved.label}
+            </a>
             <Link
               href="/contact"
-              className="rounded-full bg-action px-5 py-2.5 text-sm font-semibold text-on-brand hover:bg-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              className="hidden rounded-full bg-action px-5 py-2.5 text-sm font-semibold text-on-brand hover:bg-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:inline-block"
             >
               Let us know
             </Link>

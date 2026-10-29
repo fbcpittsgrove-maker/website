@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { PageBanner, SectionHeading } from "@/components/site/section";
 import { ServiceTimes } from "@/components/site/service-times";
+import { TextUs } from "@/components/site/text-us";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
 import { pageMetadata } from "@/lib/seo";
 
@@ -82,6 +83,18 @@ export default function VisitPage() {
           </div>
         </div>
       </section>
+
+      {CHURCH.phone && (
+        <section aria-labelledby="text-us" className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+          <SectionHeading id="text-us" eyebrow="Need a ride or have a question?" title="Send Us a Text" />
+          <p className="mt-3 max-w-2xl text-text">
+            The church bus can pick you up. Tap a button and your phone starts the message for you.
+          </p>
+          <div className="mt-6">
+            <TextUs kinds={["bus", "visit", "pastor"]} />
+          </div>
+        </section>
+      )}
     </>
   );
 }

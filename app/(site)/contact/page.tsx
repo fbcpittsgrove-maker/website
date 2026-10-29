@@ -1,4 +1,5 @@
-import { PageBanner } from "@/components/site/section";
+import { PageBanner, SectionHeading } from "@/components/site/section";
+import { TextUs } from "@/components/site/text-us";
 import { CHURCH, addressLine, directionsUrl, phoneHref } from "@/lib/church";
 import { pageMetadata } from "@/lib/seo";
 
@@ -42,6 +43,15 @@ export default function ContactPage() {
             );
           })}
         </dl>
+        {CHURCH.phone && (
+          <div className="mt-10">
+            <SectionHeading eyebrow="Quickest way" title="Send Us a Text" />
+            <p className="mt-3 text-text">Tap one and your phone starts the message for you. Fill in the blanks and send.</p>
+            <div className="mt-6">
+              <TextUs kinds={["pastor", "bus", "prayer", "visit"]} />
+            </div>
+          </div>
+        )}
       </section>
     </>
   );

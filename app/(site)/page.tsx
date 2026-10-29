@@ -7,6 +7,7 @@ import { NextServiceCard } from "@/components/site/next-service-card";
 import { SectionHeading } from "@/components/site/section";
 import { SermonCard } from "@/components/site/sermon-card";
 import { ServiceTimes } from "@/components/site/service-times";
+import { TextUs } from "@/components/site/text-us";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
 import { publicAnnouncements, publicEvents, publicSermons } from "@/lib/content-server";
 import { sermonPostSlugs } from "@/lib/posts-server";
@@ -188,6 +189,21 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
+
+      {CHURCH.phone && (
+        <section aria-labelledby="text-us" className="mx-auto max-w-6xl px-4 pb-16 md:px-6 md:pb-20">
+          <div className="rounded-2xl border border-accent-line bg-accent-soft p-7 md:p-10">
+            <SectionHeading id="text-us" eyebrow="Need a ride or want to talk?" title="Send Us a Text" />
+            <p className="mt-3 max-w-2xl text-text">
+              The church bus can pick you up, and our pastors are glad to talk or pray with you. Tap a button and your
+              phone starts the message.
+            </p>
+            <div className="mt-6">
+              <TextUs kinds={["bus", "pastor", "prayer", "visit"]} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {pastor && (
         <section aria-labelledby="pastor" className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-20 md:grid-cols-2 md:gap-16 md:px-6">

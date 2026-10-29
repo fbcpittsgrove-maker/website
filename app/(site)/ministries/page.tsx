@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { PageBanner } from "@/components/site/section";
+import { TextUs } from "@/components/site/text-us";
 import { CHURCH, type Ministry } from "@/lib/church";
 import { pageMetadata } from "@/lib/seo";
 
@@ -35,6 +36,11 @@ export default function MinistriesPage() {
                       </li>
                     ))}
                   </ul>
+                )}
+                {m.text && CHURCH.phone && (
+                  <div className="mt-6">
+                    <TextUs kinds={[m.text]} />
+                  </div>
                 )}
               </div>
             </article>
