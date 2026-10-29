@@ -11,7 +11,8 @@
 export type ServiceTime = { time: string; label: string; outreach?: boolean };
 export type ServiceDay = { day: string; services: ServiceTime[] };
 export type Leader = { name: string; title: string; bio: string; image?: string; imageAlt?: string };
-export type MinistryClass = { name: string; who?: string };
+export type MinistryClass = { name: string; who?: string; teacher?: string };
+export type Worker = { name: string; role: string; image: string; imageAlt: string };
 export type Ministry = { name: string; when?: string; blurb: string; classes?: MinistryClass[]; image?: string; imageAlt?: string };
 
 export const CHURCH = {
@@ -66,6 +67,21 @@ export const CHURCH = {
       imageAlt: "Assistant Pastor Steven Bradbury and his wife Kristen, smiling outdoors",
     },
   ] satisfies Leader[],
+  /** Teachers and workers shown under the pastors on the About page. */
+  workers: [
+    {
+      name: "Sarah Reichelt",
+      role: "Junior Sunday School teacher",
+      image: "/images/sarah-reichelt.jpg",
+      imageAlt: "Sarah Reichelt, junior Sunday School teacher, in front of the church's white paneled doors",
+    },
+    {
+      name: "Jerry Reichelt",
+      role: "Junior Church preacher",
+      image: "/images/jerry-reichelt.jpg",
+      imageAlt: "Jerry Reichelt, Junior Church preacher, in front of the church's white paneled doors",
+    },
+  ] satisfies Worker[],
   ministries: [
     {
       name: "Sunday School",
@@ -73,11 +89,15 @@ export const CHURCH = {
       blurb: "Bible classes for every age before the morning service.",
       classes: [
         { name: "Primary", who: "Kindergarten–3rd grade" },
-        { name: "Junior", who: "4th–5th grade" },
+        { name: "Junior", who: "4th–5th grade", teacher: "Sarah Reichelt" },
         { name: "Teen", who: "6th–12th grade" },
         { name: "Adult Ladies" },
         { name: "Adult Men" },
       ],
+    },
+    {
+      name: "Junior Church",
+      blurb: "Bible preaching just for children, led by Jerry Reichelt.",
     },
     {
       name: "Bible Study & Prayer",

@@ -27,7 +27,10 @@ export default function MinistriesPage() {
                   <ul className="mt-5 divide-y divide-border-soft border-y border-border-soft">
                     {m.classes.map((c) => (
                       <li key={c.name} className="flex items-baseline justify-between gap-4 py-2.5">
-                        <span className="font-semibold text-ink">{c.name} class</span>
+                        <span>
+                          <span className="font-semibold text-ink">{c.name} class</span>
+                          {c.teacher && <span className="block text-sm text-muted">Taught by {c.teacher}</span>}
+                        </span>
                         {c.who && <span className="text-right text-sm text-muted">{c.who}</span>}
                       </li>
                     ))}
