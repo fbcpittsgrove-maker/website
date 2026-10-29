@@ -57,8 +57,8 @@ export const CHURCH = {
       name: "Glen D. Bradbury",
       title: "Pastor",
       bio: "",
-      image: "/images/camp-meeting-preaching.jpg",
-      imageAlt: "Pastor Glen D. Bradbury preaching under the camp meeting tent",
+      image: "/images/glen-bradbury-and-wife.jpg",
+      imageAlt: "Pastor Glen D. Bradbury and his wife in front of the wooden cross in the sanctuary",
     },
     {
       name: "Steven Bradbury",
