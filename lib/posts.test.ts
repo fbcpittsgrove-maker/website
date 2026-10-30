@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  MAX_PINNED,
   formatTimestamp,
   parseDraftFile,
   parsePostForm,
   parseTimestamp,
+  pinProblem,
   postPath,
   publishProblems,
   slugify,
@@ -151,5 +153,23 @@ describe("publishProblems", () => {
 
   it("counts words, not markdown symbols", () => {
     expect(wordCount("## Who is Jesus?\n\n> **He is** the Creator.\n- one")).toBe(8);
+  });
+});
+
+describe("pinProblem", () => {
+  it("pins a published post while there is room", () => {
+    expect(pinProblem("sermon", "published", 0)).toBeNull();
+    expect(pinProblem("question", "published", MAX_PINNED - 1)).toBeNull();
+  });
+
+  it("refuses a post that is not on the website", () => {
+    for (const status of ["idea", "draft", "needs_changes"] as const) {
+      expect(pinProblem("question", status, 0)).toMatch(/on the website/);
+    }
+  });
+
+  it("caps pinned posts per kind", () => {
+    expect(pinProblem("sermon", "published", MAX_PINNED)).toBe("Only 3 sermon posts can be pinned at once. Unpin one first.");
+    expect(pinProblem("question", "published", MAX_PINNED)).toBe("Only 3 question pages can be pinned at once. Unpin one first.");
   });
 });

@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CheckCircle2, CircleAlert, ExternalLink, MessageSquareText, Pencil, Trash2, X } from "lucide-react";
-import { deletePost, savePost, setPostStatus, setSermonPreacher } from "@/app/(app)/admin/posts/actions";
+import { ArrowLeft, CheckCircle2, CircleAlert, ExternalLink, MessageSquareText, Pencil, Pin, PinOff, Trash2, X } from "lucide-react";
+import { deletePost, savePost, setPostPinned, setPostStatus, setSermonPreacher } from "@/app/(app)/admin/posts/actions";
 import { ArticleMarkdown } from "@/lib/article-markdown";
 import { CHURCH } from "@/lib/church";
 import { formatDay } from "@/lib/content";
@@ -108,6 +108,7 @@ export function PostEditor({ post }: { post: AdminPost }) {
 
   const isIdea = post.status === "idea";
   const isLive = post.status === "published";
+  const isPinned = !!post.pinned_at;
   const problems = publishProblems({ kind: post.kind, ...form, sermon: post.sermon });
   const needsPreacher = post.kind === "sermon" && !!post.sermon && (!post.sermon.preacher.trim() || UNCONFIRMED.test(post.sermon.preacher));
   const words = wordCount(form.body_md);
@@ -171,6 +172,7 @@ export function PostEditor({ post }: { post: AdminPost }) {
     );
   };
   const takeDown = () => run(() => setPostStatus(post.id, "draft"));
+  const togglePin = () => run(() => setPostPinned(post.id, !isPinned));
   const remove = () =>
     run(
       () => deletePost(post.id),
@@ -201,6 +203,7 @@ export function PostEditor({ post }: { post: AdminPost }) {
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted">
             {POST_KIND_LABEL[post.kind]} · {POST_STATUS_LABEL[post.status]}
+            {isPinned && " · Pinned"}
           </p>
           {post.sermon && (
             <p className="mt-1 text-sm text-muted">
@@ -384,9 +387,22 @@ export function PostEditor({ post }: { post: AdminPost }) {
               </>
             )}
             {isLive && (
-              <button onClick={takeDown} disabled={pending} className={SECONDARY}>
-                Take off the website
-              </button>
+              <>
+                <button onClick={togglePin} disabled={pending} className={isPinned ? SECONDARY : PRIMARY}>
+                  <span className="inline-flex items-center gap-1.5">
+                    {isPinned ? <PinOff className="h-4 w-4" aria-hidden /> : <Pin className="h-4 w-4" aria-hidden />}
+                    {isPinned ? "Unpin" : "Pin to the top"}
+                  </span>
+                </button>
+                <p className="text-xs text-muted">
+                  {post.kind === "sermon"
+                    ? "Pinned sermons are featured at the top of the Sermons page and on the home page."
+                    : "Pinned questions are featured at the top of the Bible Questions page."}
+                </p>
+                <button onClick={takeDown} disabled={pending} className={SECONDARY}>
+                  Take off the website
+                </button>
+              </>
             )}
             {confirmDelete ? (
               <button
@@ -469,9 +485,14 @@ export function PostEditor({ post }: { post: AdminPost }) {
           {problems.length > 0 && !isLive && <p className="mb-2 text-xs text-warn">{problems[0]}</p>}
           <div className="flex gap-2">
             {isLive ? (
-              <button onClick={takeDown} disabled={pending} className={`${SECONDARY} flex-1`}>
-                Take off the website
-              </button>
+              <>
+                <button onClick={takeDown} disabled={pending} className={`${SECONDARY} flex-1`}>
+                  Take off the website
+                </button>
+                <button onClick={togglePin} disabled={pending} aria-label={isPinned ? "Unpin" : "Pin to the top"} className={SECONDARY}>
+                  {isPinned ? <PinOff className="h-4 w-4" aria-hidden /> : <Pin className="h-4 w-4" aria-hidden />}
+                </button>
+              </>
             ) : (
               <>
                 {publishButton}

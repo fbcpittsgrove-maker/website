@@ -10,7 +10,7 @@ import { ServiceTimes } from "@/components/site/service-times";
 import { TextUs } from "@/components/site/text-us";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
 import { publicAnnouncements, publicEvents, publicSermons } from "@/lib/content-server";
-import { sermonPostSlugs } from "@/lib/posts-server";
+import { pinnedPosts, sermonPostSlugs } from "@/lib/posts-server";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata("/");
@@ -34,12 +34,14 @@ function HeroPhoto({ wide, tall }: { wide: string; tall: string }) {
 }
 
 export default async function HomePage() {
-  const [events, sermons, announcements, sermonSlugs] = await Promise.all([
+  const [events, sermons, announcements, sermonSlugs, pinned] = await Promise.all([
     publicEvents(4),
     publicSermons(1),
     publicAnnouncements(3),
     sermonPostSlugs(),
+    pinnedPosts("sermon"),
   ]);
+  const featured = pinned[0];
   const pastor = CHURCH.leaders[0];
 
   return (
@@ -180,10 +182,21 @@ export default async function HomePage() {
           </Link>
         </div>
         <div aria-labelledby="sermon" className="flex flex-col rounded-2xl border border-border bg-surface p-7 md:p-10">
-          <SectionHeading id="sermon" eyebrow="Listen again" title="Latest Sermon" />
-          <div className="mt-8">
-            {sermons[0] ? <SermonCard sermon={sermons[0]} postSlug={sermonSlugs.get(sermons[0].id)} /> : <p className="text-muted">Sermons will be posted here soon.</p>}
-          </div>
+          {featured ? (
+            <>
+              <SectionHeading id="sermon" eyebrow="Don't miss this" title="Featured Sermon" />
+              <div className="mt-8">
+                <SermonCard sermon={featured.sermon!} postSlug={featured.slug} featured />
+              </div>
+            </>
+          ) : (
+            <>
+              <SectionHeading id="sermon" eyebrow="Listen again" title="Latest Sermon" />
+              <div className="mt-8">
+                {sermons[0] ? <SermonCard sermon={sermons[0]} postSlug={sermonSlugs.get(sermons[0].id)} /> : <p className="text-muted">Sermons will be posted here soon.</p>}
+              </div>
+            </>
+          )}
           <Link href="/sermons" className="mt-auto inline-block pt-6 font-semibold text-accent hover:underline">
             All sermons →
           </Link>

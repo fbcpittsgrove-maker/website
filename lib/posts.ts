@@ -146,6 +146,21 @@ export function parsePostForm(kind: PostKind, form: Record<string, unknown>): Po
   return { ok: true, value };
 }
 
+// ============================================================ pinning
+
+/** Pinned posts each list page shows first, per kind. */
+export const MAX_PINNED = 3;
+
+/** Why a post can't be pinned, in plain language. Null = it can.
+ *  `pinnedOthers` counts the other pinned posts of the same kind. */
+export function pinProblem(kind: PostKind, status: PostStatus, pinnedOthers: number): string | null {
+  if (status !== "published") return "Only a post that's on the website can be pinned.";
+  if (pinnedOthers >= MAX_PINNED) {
+    return `Only ${MAX_PINNED} ${kind === "sermon" ? "sermon posts" : "question pages"} can be pinned at once. Unpin one first.`;
+  }
+  return null;
+}
+
 // ============================================================ publish gate
 
 export const TITLE_RANGE = { min: 30, max: 60 } as const;

@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { logActivity } from "@/lib/activity";
 import { reportAndFail, reportIssue } from "@/lib/issues";
 import { submitToIndexNow } from "@/lib/indexnow";
-import { parsePostForm, postPath, publishProblems, type PostKind } from "@/lib/posts";
+import { parsePostForm, pinProblem, postPath, publishProblems, type PostKind, type PostStatus } from "@/lib/posts";
 import { siteUrl } from "@/lib/seo";
 
 type Result = { ok: true } | { ok: false; error: string };
@@ -25,7 +25,8 @@ function refresh(kind: PostKind, slug: string, published: boolean) {
   after(async () => {
     try {
       const base = siteUrl();
-      await submitToIndexNow(base, [`${base}${path}`, `${base}${kind === "sermon" ? "/sermons" : "/questions"}`]);
+      const lists = kind === "sermon" ? [`${base}/sermons`, `${base}/`] : [`${base}/questions`];
+      await submitToIndexNow(base, [`${base}${path}`, ...lists]);
     } catch (e) {
       await reportIssue({ source: "server_action", route: "posts.indexnow", message: e instanceof Error ? e.message : String(e) });
     }
@@ -45,7 +46,7 @@ async function loadPost(id: string) {
 type LoadedPost = {
   kind: PostKind;
   slug: string;
-  status: string;
+  status: PostStatus;
   published_at: string | null;
   sermon_id: string | null;
   sermon: { id: string; title: string; preacher: string } | null;
@@ -116,6 +117,7 @@ export async function setPostStatus(id: string, status: "published" | "draft" | 
     .update({
       status,
       published_at: status === "published" ? (post.published_at ?? new Date().toISOString()) : post.published_at,
+      ...(status === "published" ? {} : { pinned_at: null }),
       reviewed_by: actor.id,
     })
     .eq("id", id)
@@ -141,6 +143,52 @@ export async function setPostStatus(id: string, status: "published" | "draft" | 
   }
   await logActivity(actor.id, `post_${status}`, { id, slug: post.slug });
   refresh(post.kind, post.slug, status === "published" || post.status === "published");
+  return { ok: true };
+}
+
+/** Pin a published post to the top of its list (and the home page, for a
+ *  sermon), or unpin it. */
+export async function setPostPinned(id: string, pinned: boolean): Promise<Result> {
+  const actor = await requireStaff();
+  const { supabase, data: post, error: readErr } = await loadPost(id);
+  if (readErr || !post) {
+    return reportAndFail(
+      { source: "server_action", route: "posts.pin", message: readErr?.message ?? "post not found", errorCode: readErr?.code, userId: actor.id },
+      "Couldn't find that post.",
+    );
+  }
+
+  if (pinned) {
+    const { count, error } = await supabase
+      .from("posts")
+      .select("id", { count: "exact", head: true })
+      .eq("kind", post.kind)
+      .not("pinned_at", "is", null)
+      .neq("id", id);
+    if (error) {
+      return reportAndFail(
+        { source: "server_action", route: "posts.pin", message: error.message, errorCode: error.code, userId: actor.id },
+        "Couldn't check which posts are pinned.",
+      );
+    }
+    const problem = pinProblem(post.kind, post.status, count ?? 0);
+    if (problem) return { ok: false, error: problem };
+  }
+
+  const { error } = await supabase
+    .from("posts")
+    .update({ pinned_at: pinned ? new Date().toISOString() : null })
+    .eq("id", id)
+    .select("id")
+    .single();
+  if (error) {
+    return reportAndFail(
+      { source: "server_action", route: "posts.pin", message: error.message, errorCode: error.code, userId: actor.id },
+      pinned ? "Couldn't pin that post." : "Couldn't unpin that post.",
+    );
+  }
+  await logActivity(actor.id, pinned ? "post_pinned" : "post_unpinned", { id, slug: post.slug });
+  refresh(post.kind, post.slug, true);
   return { ok: true };
 }
 

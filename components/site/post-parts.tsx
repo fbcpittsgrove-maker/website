@@ -55,13 +55,20 @@ export function VisitCta() {
   );
 }
 
-/** A linked card for a question page. */
-export function QuestionCard({ slug, title, description }: { slug: string; title: string; description?: string }) {
+/** A linked card for a question page; `featured` dresses a pinned one. */
+export function QuestionCard({ slug, title, description, featured = false }: { slug: string; title: string; description?: string; featured?: boolean }) {
   return (
     <Link
       href={`/questions/${slug}`}
-      className="block rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-accent-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+      className={`block rounded-2xl border p-6 transition-colors hover:border-accent-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+        featured ? "border-accent-line border-l-4 border-l-accent bg-accent-soft/60" : "border-border bg-surface"
+      }`}
     >
+      {featured && (
+        <span className="mb-3 inline-block rounded-full bg-accent px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-on-brand">
+          Featured
+        </span>
+      )}
       <p className="font-display text-xl font-semibold leading-snug text-ink">{title}</p>
       {description && <p className="mt-2 text-sm text-text">{description}</p>}
       <p className="mt-3 text-sm font-semibold text-accent">Read the answer →</p>

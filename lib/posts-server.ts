@@ -1,7 +1,8 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { createPublicClient } from "@/lib/supabase/public";
-import type { PostKind, PostStatus } from "@/lib/posts";
+import type { PublicSermon } from "@/lib/content-server";
+import { MAX_PINNED, type PostKind, type PostStatus } from "@/lib/posts";
 
 /** posts → sermons is reached two ways (posts.sermon_id and post_sources), so
  *  the direct embed names its foreign key. */
@@ -18,6 +19,7 @@ export type AdminPostRow = {
   status: PostStatus;
   updated_at: string;
   published_at: string | null;
+  pinned_at: string | null;
   sermon: Pick<PostSermon, "title" | "preached_on"> | null;
 };
 
@@ -35,6 +37,7 @@ export type AdminPost = {
   reviewer_notes: string;
   status: PostStatus;
   published_at: string | null;
+  pinned_at: string | null;
   updated_at: string;
   sermon: PostSermon | null;
   sources: PostSource[];
@@ -46,7 +49,7 @@ export async function listPosts(): Promise<AdminPostRow[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("posts")
-    .select(`id, kind, slug, title, question, status, updated_at, published_at, ${OWN_SERMON}(title, preached_on)`)
+    .select(`id, kind, slug, title, question, status, updated_at, published_at, pinned_at, ${OWN_SERMON}(title, preached_on)`)
     .order("updated_at", { ascending: false });
   if (error) throw new Error(`Posts read failed — ${error.message}`);
   return data as unknown as AdminPostRow[];
@@ -66,7 +69,7 @@ export async function getPost(id: string): Promise<AdminPost | null> {
   const { data, error } = await supabase
     .from("posts")
     .select(
-      `id, kind, slug, title, description, question, body_md, reviewer_notes, status, published_at, updated_at, ` +
+      `id, kind, slug, title, description, question, body_md, reviewer_notes, status, published_at, pinned_at, updated_at, ` +
         `${OWN_SERMON}(id, title, preacher, preached_on, scripture, published), ` +
         `sources:post_sources(sermon_id, start_seconds, sermon:sermons(title, preached_on))`,
     )
@@ -120,6 +123,30 @@ export async function publishedPosts(kind: PostKind, limit = 200): Promise<Publi
     .limit(limit);
   if (error) throw new Error(`Public posts read failed — ${error.message}`);
   return data as unknown as PublicPostSummary[];
+}
+
+export type PinnedPost = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  /** The full sermon card for sermon posts; null for question pages. */
+  sermon: PublicSermon | null;
+};
+
+/** Pinned posts of one kind, newest pin first. A sermon post whose sermon
+ *  is hidden is left out — its card has nothing to show. */
+export async function pinnedPosts(kind: PostKind): Promise<PinnedPost[]> {
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select(`id, slug, title, description, ${OWN_SERMON}(id, title, preacher, preached_on, scripture, summary, video_url, audio_url)`)
+    .eq("kind", kind)
+    .not("pinned_at", "is", null)
+    .order("pinned_at", { ascending: false })
+    .limit(MAX_PINNED);
+  if (error) throw new Error(`Pinned posts read failed — ${error.message}`);
+  return (data as unknown as PinnedPost[]).filter((p) => kind === "question" || p.sermon);
 }
 
 /** Published sermon post slug per sermon id — the sermon cards link to them. */

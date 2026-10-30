@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Pin } from "lucide-react";
 import { requireStaff } from "@/lib/auth/profile";
 import { formatDay } from "@/lib/content";
 import { POST_KIND_LABEL, POST_STATUS_LABEL, type PostStatus } from "@/lib/posts";
@@ -35,6 +35,12 @@ function Row({ post }: { post: AdminPostRow }) {
           <p className="flex flex-wrap items-center gap-2 font-semibold text-ink">
             {post.status === "idea" ? post.question : post.title}
             <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${BADGE[post.status]}`}>{POST_STATUS_LABEL[post.status]}</span>
+            {post.pinned_at && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-2 py-0.5 text-[11px] font-semibold text-accent">
+                <Pin className="h-3 w-3" aria-hidden />
+                Pinned
+              </span>
+            )}
           </p>
           <p className="mt-1 text-sm text-muted">{detail}</p>
         </div>
@@ -58,7 +64,7 @@ export default async function AdminPostsPage() {
         <p className="mt-6 rounded-xl border border-dashed border-border-strong px-4 py-8 text-center text-sm text-muted">No posts yet.</p>
       ) : (
         GROUPS.map(({ status, heading, blurb }) => {
-          const rows = posts.filter((p) => p.status === status);
+          const rows = posts.filter((p) => p.status === status).sort((a, b) => Number(!!b.pinned_at) - Number(!!a.pinned_at));
           if (rows.length === 0) return null;
           return (
             <section key={status} className="mt-8">
