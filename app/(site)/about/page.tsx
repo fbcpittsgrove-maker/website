@@ -32,7 +32,7 @@ export default function AboutPage() {
               <article key={l.name} className="overflow-hidden rounded-2xl border border-border bg-bg">
                 {l.image && l.imageAlt && (
                   <div className="relative aspect-[4/3] bg-inset">
-                    <Image src={l.image} alt={l.imageAlt} fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover object-[50%_25%]" />
+                    <Image src={l.image} alt={l.imageAlt} fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover object-[50%_75%]" />
                   </div>
                 )}
                 <div className="p-8">
