@@ -71,6 +71,18 @@ export const CHURCH = {
   /** Teachers and workers shown under the pastors on the About page. */
   workers: [
     {
+      name: "Jody Reichelt",
+      role: "Sunday School Superintendent & Junior Church leader",
+      image: "/images/jody-reichelt.jpg",
+      imageAlt: "Jody Reichelt, Sunday School superintendent and Junior Church leader, in front of the church's white paneled doors",
+    },
+    {
+      name: "Peggy Gaskill",
+      role: "Primary Sunday School teacher",
+      image: "/images/peggy-gaskill.jpg",
+      imageAlt: "Peggy Gaskill, primary Sunday School teacher, in front of the church's white paneled doors",
+    },
+    {
       name: "Sarah Reichelt",
       role: "Junior Sunday School teacher",
       image: "/images/sarah-reichelt.jpg",
@@ -87,7 +99,7 @@ export const CHURCH = {
     {
       name: "Sunday School",
       when: "Sundays at 9:45 AM",
-      blurb: "Bible classes for every age before the morning service.",
+      blurb: "Bible classes for every age before the morning service, led by Superintendent Jody Reichelt.",
       classes: [
         { name: "Primary", who: "Kindergarten–3rd grade", teacher: "Peggy Gaskill" },
         { name: "Junior", who: "4th–5th grade", teacher: "Sarah Reichelt" },
@@ -98,7 +110,7 @@ export const CHURCH = {
     },
     {
       name: "Junior Church",
-      blurb: "Bible preaching just for children, led by Jody with Jerry Reichelt preaching.",
+      blurb: "Bible preaching just for children, led by Jody Reichelt with Jerry Reichelt preaching.",
     },
     {
       name: "Bible Study & Prayer",

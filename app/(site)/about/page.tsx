@@ -48,11 +48,11 @@ export default function AboutPage() {
 
       <section aria-labelledby="workers" className="mx-auto max-w-6xl px-4 py-16 md:px-6">
         <SectionHeading id="workers" eyebrow="Serving with us" title="Teachers & Workers" />
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {CHURCH.workers.map((w) => (
             <article key={w.name} className="overflow-hidden rounded-2xl border border-border bg-surface">
               <div className="relative aspect-[4/5] bg-inset">
-                <Image src={w.image} alt={w.imageAlt} fill sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+                <Image src={w.image} alt={w.imageAlt} fill sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw" className="object-cover" />
               </div>
               <div className="p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">{w.role}</p>
