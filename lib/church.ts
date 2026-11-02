@@ -13,8 +13,19 @@ export type ServiceDay = { day: string; services: ServiceTime[] };
 export type Leader = { name: string; title: string; bio: string; image?: string; imageAlt?: string };
 export type MinistryClass = { name: string; who?: string; teacher?: string };
 export type Worker = { name: string; role: string; image: string; imageAlt: string };
-/** `text` puts a pre-written text button on the card (see lib/text-us). */
-export type Ministry = { name: string; when?: string; blurb: string; classes?: MinistryClass[]; text?: "bus"; image?: string; imageAlt?: string };
+/** `text` puts a pre-written text button on the card (see lib/text-us).
+ *  `imagePosition` is a CSS object-position for photos that crop badly
+ *  from the center. */
+export type Ministry = {
+  name: string;
+  when?: string;
+  blurb: string;
+  classes?: MinistryClass[];
+  text?: "bus";
+  image?: string;
+  imageAlt?: string;
+  imagePosition?: string;
+};
 
 export const CHURCH = {
   name: "Faith Baptist Church",
@@ -129,6 +140,7 @@ export const CHURCH = {
       blurb: "Preaching and special music under the big red-and-white tent on the church grounds.",
       image: "/images/camp-meeting-preaching.jpg",
       imageAlt: "Pastor Glen D. Bradbury preaching under the camp meeting tent",
+      imagePosition: "50% 30%",
     },
     {
       name: "Ladies’ Ministry",

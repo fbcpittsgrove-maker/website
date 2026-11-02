@@ -65,6 +65,13 @@ export const PUBLIC_PAGES: PublicPage[] = [
       "You can know 100% for sure that you will spend eternity in Heaven. Six simple truths from the Bible about sin, Christ's love, and God's gift of salvation.",
   },
   {
+    path: "/blog",
+    name: "Blog",
+    title: "Sermon Blog & Bible Answers",
+    description:
+      "Sermon posts and plain answers to Bible questions from Faith Baptist Church of Pittsgrove, NJ, written from our preaching and the King James Bible.",
+  },
+  {
     path: "/questions",
     name: "Bible Questions",
     title: "Bible Questions Answered",

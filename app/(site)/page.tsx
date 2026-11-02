@@ -10,7 +10,9 @@ import { ServiceTimes } from "@/components/site/service-times";
 import { TextUs } from "@/components/site/text-us";
 import { CHURCH, addressLine, directionsUrl } from "@/lib/church";
 import { publicAnnouncements, publicEvents, publicSermons } from "@/lib/content-server";
-import { pinnedPosts, sermonPostSlugs } from "@/lib/posts-server";
+import { BLOG_LABEL } from "@/components/site/post-parts";
+import { postPath } from "@/lib/posts";
+import { blogPosts, pinnedPosts, sermonPostSlugs } from "@/lib/posts-server";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata("/");
@@ -34,14 +36,16 @@ function HeroPhoto({ wide, tall }: { wide: string; tall: string }) {
 }
 
 export default async function HomePage() {
-  const [events, sermons, announcements, sermonSlugs, pinned] = await Promise.all([
+  const [events, sermons, announcements, sermonSlugs, pinned, blog] = await Promise.all([
     publicEvents(4),
     publicSermons(1),
     publicAnnouncements(3),
     sermonPostSlugs(),
     pinnedPosts("sermon"),
+    blogPosts(4),
   ]);
   const featured = pinned[0];
+  const posts = blog.filter((p) => p.id !== featured?.id).slice(0, 3);
   const pastor = CHURCH.leaders[0];
 
   return (
@@ -171,7 +175,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-16 md:grid-cols-2 md:px-6 md:py-20">
+      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-16 md:grid-cols-2 md:px-6 md:py-20 lg:grid-cols-3">
         <div aria-labelledby="events" className="flex flex-col rounded-2xl border border-border bg-surface p-7 md:p-10">
           <SectionHeading id="events" eyebrow="Coming up" title="Upcoming Events" />
           <div className="mt-8">
@@ -199,6 +203,29 @@ export default async function HomePage() {
           )}
           <Link href="/sermons" className="mt-auto inline-block pt-6 font-semibold text-accent hover:underline">
             All sermons →
+          </Link>
+        </div>
+        <div aria-labelledby="blog" className="flex flex-col rounded-2xl border border-border bg-surface p-7 md:col-span-2 md:p-10 lg:col-span-1">
+          <SectionHeading id="blog" eyebrow="Read & reflect" title="From the Blog" />
+          <div className="mt-8">
+            {posts.length === 0 ? (
+              <p className="text-muted">Posts will be shared here soon.</p>
+            ) : (
+              <ul className="divide-y divide-border">
+                {posts.map((p) => (
+                  <li key={p.id} className="py-4 first:pt-0 last:pb-0">
+                    <Link href={postPath(p.kind, p.slug)} className="group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{BLOG_LABEL[p.kind]}</p>
+                      <p className="mt-1 font-display text-xl font-semibold leading-snug text-ink group-hover:underline">{p.title}</p>
+                      {p.description && <p className="mt-1.5 line-clamp-2 text-sm text-text">{p.description}</p>}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <Link href="/blog" className="mt-auto inline-block pt-6 font-semibold text-accent hover:underline">
+            All posts →
           </Link>
         </div>
       </section>

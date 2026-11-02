@@ -18,6 +18,7 @@ function refresh(kind: PostKind, slug: string, published: boolean) {
   revalidatePath("/admin");
   revalidatePath(path);
   revalidatePath(kind === "sermon" ? "/sermons" : "/questions");
+  revalidatePath("/blog");
   revalidatePath("/");
   revalidatePath("/sitemap.xml");
   revalidatePath("/llms.txt");
@@ -25,7 +26,7 @@ function refresh(kind: PostKind, slug: string, published: boolean) {
   after(async () => {
     try {
       const base = siteUrl();
-      const lists = kind === "sermon" ? [`${base}/sermons`, `${base}/`] : [`${base}/questions`];
+      const lists = [`${base}${kind === "sermon" ? "/sermons" : "/questions"}`, `${base}/blog`, `${base}/`];
       await submitToIndexNow(base, [`${base}${path}`, ...lists]);
     } catch (e) {
       await reportIssue({ source: "server_action", route: "posts.indexnow", message: e instanceof Error ? e.message : String(e) });

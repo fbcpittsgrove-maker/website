@@ -125,6 +125,22 @@ export async function publishedPosts(kind: PostKind, limit = 200): Promise<Publi
   return data as unknown as PublicPostSummary[];
 }
 
+export type BlogPost = PublicPostSummary & { pinned_at: string | null };
+
+/** Blog posts of both kinds: pinned first (newest pin), then newest
+ *  published. */
+export async function blogPosts(limit = 200): Promise<BlogPost[]> {
+  const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select(`${SUMMARY}, pinned_at`)
+    .order("pinned_at", { ascending: false, nullsFirst: false })
+    .order("published_at", { ascending: false })
+    .limit(limit);
+  if (error) throw new Error(`Blog posts read failed — ${error.message}`);
+  return data as unknown as BlogPost[];
+}
+
 export type PinnedPost = {
   id: string;
   slug: string;

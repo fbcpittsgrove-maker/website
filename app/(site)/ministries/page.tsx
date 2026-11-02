@@ -17,7 +17,7 @@ export default function MinistriesPage() {
             <article key={m.name} className="overflow-hidden rounded-2xl border border-border bg-surface">
               {m.image && (
                 <div className="relative aspect-[16/9]">
-                  <Image src={m.image} alt={m.imageAlt ?? ""} fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover" />
+                  <Image src={m.image} alt={m.imageAlt ?? ""} fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover" style={{ objectPosition: m.imagePosition }} />
                 </div>
               )}
               <div className="p-8">

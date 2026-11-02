@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { CHURCH, addressLine } from "@/lib/church";
+import { formatDay } from "@/lib/content";
+import { postPath, type PostKind } from "@/lib/posts";
+
+export const BLOG_LABEL: Record<PostKind, string> = { sermon: "Sermon post", question: "Bible question" };
 
 /** Article header for sermon posts and question pages: navy ground, serif
  *  title — the PageBanner look with a byline row. */
@@ -72,6 +76,41 @@ export function QuestionCard({ slug, title, description, featured = false }: { s
       <p className="font-display text-xl font-semibold leading-snug text-ink">{title}</p>
       {description && <p className="mt-2 text-sm text-text">{description}</p>}
       <p className="mt-3 text-sm font-semibold text-accent">Read the answer →</p>
+    </Link>
+  );
+}
+
+/** A linked card for any blog post on /blog; `featured` dresses a pinned one. */
+export function BlogCard({
+  kind,
+  slug,
+  title,
+  description,
+  preachedOn,
+  featured = false,
+}: {
+  kind: PostKind;
+  slug: string;
+  title: string;
+  description?: string;
+  preachedOn?: string;
+  featured?: boolean;
+}) {
+  return (
+    <Link
+      href={postPath(kind, slug)}
+      className={`block rounded-2xl border p-6 transition-colors hover:border-accent-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+        featured ? "border-accent-line border-l-4 border-l-accent bg-accent-soft/60" : "border-border bg-surface"
+      }`}
+    >
+      <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+        {featured && <span className="rounded-full bg-accent px-2.5 py-0.5 text-[10px] text-on-brand">Featured</span>}
+        <span>{BLOG_LABEL[kind]}</span>
+        {preachedOn && <span className="text-muted">{formatDay(preachedOn)}</span>}
+      </p>
+      <p className="mt-2 font-display text-xl font-semibold leading-snug text-ink">{title}</p>
+      {description && <p className="mt-2 text-sm text-text">{description}</p>}
+      <p className="mt-3 text-sm font-semibold text-accent">{kind === "sermon" ? "Read the post →" : "Read the answer →"}</p>
     </Link>
   );
 }
