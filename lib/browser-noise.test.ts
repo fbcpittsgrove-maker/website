@@ -10,6 +10,8 @@ describe("isBrowserNoise", () => {
   it("drops errors from scripts in-app browsers inject", () => {
     expect(isBrowserNoise("TypeError: undefined is not an object (evaluating 'window.ethereum.selectedAddress = undefined')")).toBe(true);
     expect(isBrowserNoise("ReferenceError: Can't find variable: __gCrWeb")).toBe(true);
+    expect(isBrowserNoise("ReferenceError: Can't find variable: __firefox__", "global code@")).toBe(true);
+    expect(isBrowserNoise("TypeError: undefined is not an object (evaluating 'window.__firefox__.reader')")).toBe(true);
     expect(isBrowserNoise("x is undefined", "instantSearchSDKJSBridgeClearHighlight@")).toBe(true);
   });
 
