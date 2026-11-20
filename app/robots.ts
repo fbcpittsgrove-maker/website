@@ -9,6 +9,7 @@ const namedCrawlers = [
   "Googlebot",
   "Google-Extended",
   "Bingbot",
+  "Bytespider",
   "Applebot",
   "Applebot-Extended",
   "OAI-SearchBot",
@@ -36,7 +37,6 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       { userAgent: "*", allow: "/", disallow },
       { userAgent: namedCrawlers, allow: "/", disallow },
-      { userAgent: "Bytespider", disallow: "/" },
     ],
     sitemap: `${siteUrl()}/sitemap.xml`,
   };

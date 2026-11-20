@@ -1,14 +1,13 @@
 import { CHURCH, addressLine } from "@/lib/church";
 import { postPath } from "@/lib/posts";
-import { publishedPosts } from "@/lib/posts-server";
+import { publishedPostIndex } from "@/lib/posts-server";
 import { PUBLIC_PAGES, siteUrl } from "@/lib/seo";
 
-/** Plain-language summary for AI answer engines (blog-engine 08: cheap
- *  insurance, kept accurate — every line comes from lib/church.ts or a
- *  published post). Publishing a post revalidates this route. */
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const base = siteUrl();
-  const [sermons, questions] = await Promise.all([publishedPosts("sermon"), publishedPosts("question")]);
+  const { sermons, questions } = await publishedPostIndex();
   const postLines = (title: string, posts: typeof sermons) =>
     posts.length ? ["", `## ${title}`, "", ...posts.map((p) => `- [${p.title}](${base}${postPath(p.kind, p.slug)}): ${p.description}`)] : [];
   const services = CHURCH.schedule.flatMap(({ day, services }) => services.map((s) => `${day} ${s.time} — ${s.label}`));

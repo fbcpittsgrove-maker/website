@@ -96,6 +96,11 @@ Verified against supabase.com/pricing and vercel.com/docs on 2026-10-26.
       (2026-10-26) [YOU + AI]
 - [x] IndexNow: key file, ping on admin content save/delete (prod only),
       `scripts/indexnow-submit.mjs` for a whole-sitemap submit [AI]
+      After a terminal publication commits, pipe the paths verified as published
+      (one `/sermons/<slug>` or `/questions/<slug>` per line) into
+      `node scripts/indexnow-submit.mjs --published-paths` with
+      `INDEXNOW_SITE_URL=https://fbcpittsgrove.church`. The command checks each
+      path against the live public index before notifying IndexNow.
 - [ ] Bing Webmaster (import from Search Console); Google Business Profile
       for the church [YOU]
 - [ ] Bootstrap sign-ins per project: Auth → Add user (password, Auto Confirm

@@ -125,6 +125,35 @@ export async function publishedPosts(kind: PostKind, limit = 200): Promise<Publi
   return data as unknown as PublicPostSummary[];
 }
 
+type DiscoveryPost = Pick<PublicPostSummary, "id" | "kind" | "slug" | "title" | "description" | "published_at">;
+
+export async function publishedPostIndex() {
+  const supabase = createPublicClient();
+  const posts: DiscoveryPost[] = [];
+  let cursor: string | undefined;
+
+  for (;;) {
+    let query = supabase
+      .from("posts")
+      .select("id, kind, slug, title, description, published_at")
+      .eq("status", "published")
+      .order("id")
+      .limit(200);
+    if (cursor) query = query.gt("id", cursor);
+    const { data, error } = await query;
+    if (error) throw new Error(`Published post index read failed — ${error.message}`);
+    if (data.length === 0) break;
+    posts.push(...data);
+    cursor = data[data.length - 1].id;
+  }
+
+  posts.sort((a, b) => b.published_at.localeCompare(a.published_at));
+  return {
+    sermons: posts.filter((post) => post.kind === "sermon"),
+    questions: posts.filter((post) => post.kind === "question"),
+  };
+}
+
 export type BlogPost = PublicPostSummary & { pinned_at: string | null };
 
 /** Blog posts of both kinds: pinned first (newest pin), then newest
