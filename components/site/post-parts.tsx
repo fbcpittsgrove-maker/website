@@ -80,20 +80,40 @@ export function QuestionCard({ slug, title, description, featured = false }: { s
   );
 }
 
+export function FeaturedLinks({ heading, links }: {
+  heading: string;
+  links: { href: string; title: string; pinnedAt: string | null }[];
+}) {
+  const pinned = links.filter((link) => link.pinnedAt).sort((a, b) => b.pinnedAt!.localeCompare(a.pinnedAt!));
+  if (!pinned.length) return null;
+  return (
+    <aside className="mb-6 border-l-4 border-accent pl-4">
+      <h2 className="font-display text-xl font-semibold text-ink">{heading}</h2>
+      <ul className="mt-1 space-y-1">
+        {pinned.map((link) => (
+          <li key={link.href}><Link href={link.href} className="font-semibold text-accent hover:underline">{link.title}</Link></li>
+        ))}
+      </ul>
+    </aside>
+  );
+}
+
 /** A linked card for any blog post on /blog; `featured` dresses a pinned one. */
 export function BlogCard({
   kind,
   slug,
   title,
   description,
-  preachedOn,
+  day,
+  dateLabel,
   featured = false,
 }: {
   kind: PostKind;
   slug: string;
   title: string;
   description?: string;
-  preachedOn?: string;
+  day: string;
+  dateLabel: "Preached" | "Published";
   featured?: boolean;
 }) {
   return (
@@ -106,7 +126,7 @@ export function BlogCard({
       <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
         {featured && <span className="rounded-full bg-accent px-2.5 py-0.5 text-[10px] text-on-brand">Featured</span>}
         <span>{BLOG_LABEL[kind]}</span>
-        {preachedOn && <span className="text-muted">{formatDay(preachedOn)}</span>}
+        <span className="text-muted">{dateLabel} <time dateTime={day}>{formatDay(day)}</time></span>
       </p>
       <p className="mt-2 font-display text-xl font-semibold leading-snug text-ink">{title}</p>
       {description && <p className="mt-2 text-sm text-text">{description}</p>}

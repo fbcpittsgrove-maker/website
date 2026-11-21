@@ -10,7 +10,7 @@ export function SermonCard({ sermon, postSlug, featured = false }: { sermon: Pub
     <article className={`rounded-2xl border p-6 ${featured ? "border-accent-line border-l-4 border-l-accent bg-accent-soft/60" : "border-border bg-surface"}`}>
       <p className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
         {featured && <span className="rounded-full bg-accent px-2.5 py-0.5 text-[10px] tracking-[0.2em] text-on-brand">Featured</span>}
-        {formatDay(sermon.preached_on)}
+        <time dateTime={sermon.preached_on}>{formatDay(sermon.preached_on)}</time>
       </p>
       <h3 className="mt-2 font-display text-2xl font-semibold leading-snug text-ink">
         {postSlug ? (

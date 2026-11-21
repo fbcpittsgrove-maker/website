@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { createPublicClient } from "@/lib/supabase/public";
+import { createPublicClient, readPublicPages } from "@/lib/supabase/public";
 import type { PublicSermon } from "@/lib/content-server";
 import { MAX_PINNED, type PostKind, type PostStatus } from "@/lib/posts";
 
@@ -129,23 +129,15 @@ type DiscoveryPost = Pick<PublicPostSummary, "id" | "kind" | "slug" | "title" | 
 
 export async function publishedPostIndex() {
   const supabase = createPublicClient();
-  const posts: DiscoveryPost[] = [];
-  let cursor: string | undefined;
-
-  for (;;) {
-    let query = supabase
+  const posts = await readPublicPages<DiscoveryPost>("Published post index", (after) => {
+    const page = supabase
       .from("posts")
       .select("id, kind, slug, title, description, published_at")
       .eq("status", "published")
       .order("id")
       .limit(200);
-    if (cursor) query = query.gt("id", cursor);
-    const { data, error } = await query;
-    if (error) throw new Error(`Published post index read failed — ${error.message}`);
-    if (data.length === 0) break;
-    posts.push(...data);
-    cursor = data[data.length - 1].id;
-  }
+    return after ? page.gt("id", after) : page;
+  });
 
   posts.sort((a, b) => b.published_at.localeCompare(a.published_at));
   return {
@@ -155,6 +147,28 @@ export async function publishedPostIndex() {
 }
 
 export type BlogPost = PublicPostSummary & { pinned_at: string | null };
+
+export async function publicBlogArchive(search: string) {
+  const supabase = createPublicClient();
+  const summaries = readPublicPages("Blog archive", (after) => {
+    const page = supabase.from("posts").select(`${SUMMARY}, pinned_at`).eq("status", "published").order("id").limit(200);
+    return (after ? page.gt("id", after) : page).overrideTypes<BlogPost[], { merge: false }>();
+  });
+  const bodyMatches = search
+    ? readPublicPages("Blog search", (after) => {
+        const page = supabase
+          .from("posts")
+          .select("id")
+          .eq("status", "published")
+          .textSearch("body_md", search, { config: "english", type: "plain" })
+          .order("id")
+          .limit(200);
+        return after ? page.gt("id", after) : page;
+      })
+    : [];
+  const [posts, matches] = await Promise.all([summaries, bodyMatches]);
+  return { posts, bodyMatches: new Set<string>(matches.map((row) => row.id)) };
+}
 
 /** Blog posts of both kinds: pinned first (newest pin), then newest
  *  published. */

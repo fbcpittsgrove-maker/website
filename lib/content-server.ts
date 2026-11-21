@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { createPublicClient } from "@/lib/supabase/public";
+import { createPublicClient, readPublicPages } from "@/lib/supabase/public";
 import type { ContentKind, ContentRow } from "@/lib/content";
 
 const ORDER: Record<ContentKind, { column: string; ascending: boolean }> = {
@@ -59,15 +59,38 @@ export async function publicEvents(limit = 50): Promise<PublicEvent[]> {
   return data;
 }
 
+const SERMON_FIELDS = "id, title, preacher, preached_on, scripture, summary, video_url, audio_url";
+
 export async function publicSermons(limit = 100): Promise<PublicSermon[]> {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("sermons")
-    .select("id, title, preacher, preached_on, scripture, summary, video_url, audio_url")
+    .select(SERMON_FIELDS)
     .order("preached_on", { ascending: false })
     .limit(limit);
   if (error) throw new Error(`Public sermons read failed — ${error.message}`);
   return data;
+}
+
+export async function publicSermonArchive() {
+  const supabase = createPublicClient();
+  type SermonRow = PublicSermon & { posts: { slug: string; pinned_at: string | null }[] };
+  const rows = await readPublicPages<SermonRow>("Sermon archive", (after) => {
+    const page = supabase
+      .from("sermons")
+      .select(`${SERMON_FIELDS}, posts!posts_sermon_id_fkey(slug, pinned_at)`)
+      .eq("published", true)
+      .eq("posts.kind", "sermon")
+      .eq("posts.status", "published")
+      .order("id")
+      .limit(200);
+    return after ? page.gt("id", after) : page;
+  });
+  return rows.map(({ posts, ...sermon }) => ({
+    ...sermon,
+    postSlug: posts[0]?.slug,
+    pinnedAt: posts[0]?.pinned_at ?? null,
+  }));
 }
 
 export async function publicAnnouncements(limit = 5): Promise<PublicAnnouncement[]> {
